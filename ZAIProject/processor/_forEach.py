@@ -3,8 +3,8 @@ from ..validation._requireArray import requireArray
 
 
 class ForEach(Processor):
-    def __init__(self, processor: Processor):
-        super().__init__()
+    def __init__(self, processor: Processor, reverse=None):
+        super().__init__(reverse=reverse)
         self.processor = processor
 
     def scale(self, data, project, params):

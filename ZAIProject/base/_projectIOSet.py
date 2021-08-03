@@ -26,6 +26,12 @@ class ProjectIOSet:
             self.index += 1
             return item
 
+    def __len__(self):
+        return len(self.ios)
+
+    def __getitem__(self, index):
+        return self.ios[index]
+
     def applyOne(self, data):
         result = []
         for i in self.ios:
@@ -36,4 +42,14 @@ class ProjectIOSet:
         result = []
         for i in data:
             result.append(self.applyOne(i))
+        return result
+
+    def applyPerIO(self, data):
+        result = []
+        for i in range(0, len(self.ios)):
+            for j in range(0, len(data[i])):
+                if len(result) <= i:
+                    result.append([])
+                ioResult = self.ios[i].applyOne(data[i][j])
+                result[i].append(ioResult)
         return result

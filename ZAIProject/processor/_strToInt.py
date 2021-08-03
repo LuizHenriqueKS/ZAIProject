@@ -3,6 +3,10 @@ from ..validation._requireStr import requireStr
 
 
 class StrToInt(Processor):
+
+    def __init__(self, reverse=None):
+        super().__init__(reverse=reverse)
+
     def scale(self, data, project, params=None):
         return self.apply(data, project, params)
 
@@ -11,5 +15,7 @@ class StrToInt(Processor):
         return int(data)
 
     def reverse(self):
+        if self.reverseProcessor != None:
+            return self.reverseProcessor
         from ._intToStr import IntToStr
         return IntToStr()

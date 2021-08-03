@@ -3,15 +3,15 @@ from tensorflow.python.ops.gen_array_ops import reverse
 import ZAIProject as ai
 
 samples = [
-    "1+1=2",
-    "2+1=3",
-    "3+3=6",
-    "4+2=6",
-    "5+3=8",
-    "6+6=12",
-    "7+3=10",
-    "8+4=12",
-    "9+1=10"
+    "1+1=2,0",
+    "2+1=3,1",
+    "3+3=6,0",
+    "4+2=6,2",
+    "5+3=8,2",
+    "6+6=12,0",
+    "7+3=10,4",
+    "8+4=12,4",
+    "9+1=10,8"
 ]
 
 project = ai.project.Project()
@@ -26,20 +26,24 @@ project.fit.output.add().addAll([
     ai.processor.ForEach(ai.processor.StrToInt())
 ])
 
+project.fit.output.add().addAll([
+    ai.processor.RegExp(r"\,(\d+)"),
+    ai.processor.ForEach(ai.processor.StrToInt())
+])
+
 project.predict.baseFit()
 
 project.scale(samples, verbose=True)
 
-tsModel = tf.keras.Sequential([
-    tf.keras.layers.InputLayer(input_shape=[2]),
-    tf.keras.layers.Dense(10),
-    tf.keras.layers.Dense(1)
-])
-tsModel.compile(optimizer=tf.optimizers.Adam(0.001), loss='mse')
+tsModelInput = tf.keras.layers.Input(shape=[2])
+tsModelOutput1 = tf.keras.layers.Dense(1)(tsModelInput)
+tsModelOutput2 = tf.keras.layers.Dense(1)(tsModelInput)
+tsModel = tf.keras.Model(tsModelInput, [tsModelOutput1, tsModelOutput2])
+tsModel.compile(optimizer='adam', loss='mse')
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000)
+model.fit(samples, epochs=10000, verbose=2)
 
 print('samples', samples)
 

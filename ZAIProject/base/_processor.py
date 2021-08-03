@@ -5,8 +5,9 @@ import random
 
 class Processor:
 
-    def __init__(self):
+    def __init__(self, reverse=None):
         self.sharedDataId = random.random()
+        self.reverseProcessor = reverse
 
     def scale(self, data, project, params: ProcessorParams = None):
         pass
@@ -15,8 +16,13 @@ class Processor:
         pass
 
     def reverse(self):
-        pass
+        if self.reverseProcessor == None:
+            from ..processor._noneProcessor import NoneProcessor
+            return NoneProcessor(self)
+        return self.reverseProcessor
 
     def saveData(self, dataRecorder: DataRecorder) -> None:
         dataRecorder.recordBase(self)
-        pass
+        if (self.reverseProcessor != None):
+            self.reverseProcessor.saveData(
+                dataRecorder.getChild('reverseProcessor'))
