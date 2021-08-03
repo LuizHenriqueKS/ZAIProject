@@ -4,3 +4,4 @@ from ._projectPredict import ProjectPredict
 from ._projectIO import ProjectIO
 from ._projectIOSet import ProjectIOSet
 from ._processor import Processor
+from ._sharedData import SharedData

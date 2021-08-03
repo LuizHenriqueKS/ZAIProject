@@ -32,24 +32,30 @@ class ProjectIOSet:
     def __getitem__(self, index):
         return self.ios[index]
 
-    def applyOne(self, data):
+    def applyOne(self, data, params=None):
         result = []
         for io in self.ios:
-            result.append(io.applyOne(data))
+            result.append(io.applyOne(data, params))
         return result
 
-    def apply(self, data):
+    def scaleOne(self, data, params=None):
+        result = []
+        for io in self.ios:
+            result.append(io.scaleOne(data, params))
+        return result
+
+    def apply(self, data, params=None):
         result = []
         for one in data:
-            result.append(self.applyOne(one))
+            result.append(self.applyOne(one, params))
         return result
 
-    def applyPerIO(self, data):
+    def applyPerIO(self, data, params=None):
         result = []
         for i in range(0, len(self.ios)):
             for j in range(0, len(data[i])):
                 if len(result) <= i:
                     result.append([])
-                ioResult = self.ios[i].applyOne(data[i][j])
+                ioResult = self.ios[i].applyOne(data[i][j], params)
                 result[i].append(ioResult)
         return result

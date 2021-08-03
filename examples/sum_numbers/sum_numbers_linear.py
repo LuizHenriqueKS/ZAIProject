@@ -38,7 +38,7 @@ tsModel.compile(optimizer=tf.optimizers.Adam(0.001), loss='mse')
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000, verbose=2)
+model.fit(samples, epochs=10000, verbose=2, tillLoss=0)
 
 print('samples', samples)
 

@@ -14,11 +14,14 @@ class ForEach(Processor):
 
     def scale(self, data, project, params):
         requireArray(data)
+        result = []
         for one in data:
             processorResult = one
             for processor in self.processores:
                 processorResult = processor.scale(
                     processorResult, project, params)
+            result.append(processorResult)
+        return result
 
     def apply(self, data, project, params):
         requireArray(data)

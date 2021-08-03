@@ -40,9 +40,14 @@ class ProjectIO:
             self.index += 1
             return item
 
-    def applyOne(self, data):
+    def applyOne(self, data, params=None):
         result = data
-        processorParams = ProcessorParams()
         for processor in self.processores:
-            result = processor.apply(result, self.project, processorParams)
+            result = processor.apply(result, self.project, params)
+        return result
+
+    def scaleOne(self, data, params=None):
+        result = data
+        for processor in self.processores:
+            result = processor.scale(result, self.project, params)
         return result

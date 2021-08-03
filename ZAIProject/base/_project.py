@@ -6,6 +6,7 @@ from ..utility._getMaxShape import getMaxShape
 from ..utility._getMinValue import getMinValue
 from ..utility._getMaxValue import getMaxValue
 from ..base._ioInfo import IOInfo
+from ._sharedData import SharedData
 
 
 class Project:
@@ -14,13 +15,14 @@ class Project:
         self.fit = ProjectFit(self)
         self.predict = ProjectPredict(self)
         self.modelInfo = ModelInfo()
+        self.sharedData = SharedData()
 
     def scale(self, data, verbose: bool = False):
         maxProgress = len(data)
         currentProgress = 0
         for one in data:
-            input = self.fit.input.applyOne(one)
-            output = self.fit.output.applyOne(one)
+            input = self.fit.input.scaleOne(one)
+            output = self.fit.output.scaleOne(one)
             for j in range(0, len(input)):
                 self.updateIOInfo(j, self.modelInfo.input, input)
             for j in range(0, len(output)):

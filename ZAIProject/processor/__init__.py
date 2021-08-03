@@ -6,3 +6,10 @@ from ._forEach import ForEach
 from ._splitStr import SplitStr
 from ._joinStr import JoinStr
 from ._round import Round
+from ._indexToValue import IndexToValue
+from ._valueToIndex import ValueToIndex
+from ._autoPadding1D import AutoPadding1D
+from ._classToIndex import ClassToIndex
+from ._indexToClass import IndexToClass
+from ._sparse import Sparse
+from ._reverseSparse import ReverseSparse

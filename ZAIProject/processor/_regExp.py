@@ -4,9 +4,10 @@ import re
 
 
 class RegExp(Processor):
-    def __init__(self, regexp: str, reverse=None):
+    def __init__(self, regexp: str, joinGroups=False, reverse=None):
         super().__init__(reverse=reverse)
         self.regexp = regexp
+        self.joinGroups = joinGroups
 
     def scale(self, data, project=None, params=None):
         return self.apply(data)
@@ -14,7 +15,11 @@ class RegExp(Processor):
     def apply(self, data, project=None, params=None):
         regex = re.search(self.regexp, data)
         groups = regex.groups()
-        return [i for i in groups]
+        result = [i for i in groups]
+        if self.joinGroups:
+            return ''.join(result)
+        else:
+            return result
 
     def reverse(self):
         if self.reverseProcessor == None:
@@ -25,3 +30,4 @@ class RegExp(Processor):
     def saveData(self, dataRecorder) -> None:
         super().saveData(dataRecorder)
         dataRecorder.record('regexp', self.regexp)
+        dataRecorder.record('joinGroups', self.joinGroups)

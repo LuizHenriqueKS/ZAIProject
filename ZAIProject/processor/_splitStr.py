@@ -4,7 +4,7 @@ from ..validation._requireStr import requireStr
 
 class SplitStr(Processor):
 
-    def __init__(self, separator: str, reverse):
+    def __init__(self, separator: str, reverse=None):
         self.separator = separator
         self.reverseProcessor = reverse
 
@@ -13,6 +13,8 @@ class SplitStr(Processor):
 
     def apply(self, data, project, params=None):
         requireStr(data)
+        if self.separator == '':
+            return [c for c in data]
         return data.split(self.separator)
 
     def reverse(self):

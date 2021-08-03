@@ -1,4 +1,8 @@
+from ZAIProject import processor
 import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.python.keras.layers.core import Flatten, RepeatVector
 import ZAIProject as ai
 import json
 
@@ -18,37 +22,43 @@ project = ai.project.Project()
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(.*)\=", joinGroups=True),
-    ai.processor.ForEach([
-        ai.processor.SplitStr(''),
-        ai.processor.ValueToIndex()
-    ])
+    ai.processor.SplitStr(''),
+    ai.processor.ForEach(ai.processor.ValueToIndex())
 ])
 
 project.fit.output.add().addAll([
     ai.processor.RegExp(r"\=(\d+)", joinGroups=True),
-    ai.processor.ForEach([
-        ai.processor.JoinStr(''),
-        ai.processor.ValueToIndex(),
-        ai.processor.AutoPadding1D('right')
-    ])
+    ai.processor.SplitStr(''),
+    ai.processor.ForEach(ai.processor.ValueToIndex()),
+    ai.processor.AutoPadding1D('right'),
+    ai.processor.Sparse()
 ])
 
 project.predict.baseFit()
 
 project.scale(samples, verbose=True)
 
-print('ModelInfo', project.modelInfo)
+inputShape = project.modelInfo.input[0].shape
+inputDim = project.modelInfo.input[0].maxValue + 1
+outputDim = project.modelInfo.output[0].maxValue + 2
 
 tsModel = tf.keras.Sequential([
-    tf.keras.layers.InputLayer(input_shape=[2]),
-    tf.keras.layers.Dense(10),
-    tf.keras.layers.Dense(1)
+    tf.keras.layers.InputLayer(input_shape=inputShape),
+    tf.keras.layers.Embedding(input_dim=inputDim, output_dim=10),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(10, activation='relu'),
+    tf.keras.layers.RepeatVector(2),
+    tf.keras.layers.GRU(10, return_sequences=True),
+    tf.keras.layers.TimeDistributed(
+        tf.keras.layers.Dense(outputDim, activation='softmax'))
 ])
-tsModel.compile(optimizer=tf.optimizers.Adam(0.001), loss='mse')
+tsModel.compile(optimizer='adam', loss='sparse_categorical_crossentropy',
+                metrics=['sparse_categorical_accuracy'])
+tsModel.summary()
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000, tillLoss=0)
+model.fit(samples, epochs=10000, tillAccuracy=1)
 
 print('samples', samples)
 

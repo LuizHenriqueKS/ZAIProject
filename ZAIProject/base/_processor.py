@@ -1,12 +1,16 @@
 from ._processorParams import ProcessorParams
 from ._dataRecorder import DataRecorder
+from ._sharedData import SharedData
 import random
 
 
 class Processor:
 
-    def __init__(self, reverse=None):
-        self.sharedDataId = random.random()
+    def __init__(self, sharedDataId=None, reverse=None):
+        if sharedDataId == None:
+            self.sharedDataId = random.random()
+        else:
+            self.sharedDataId = sharedDataId
         self.reverseProcessor = reverse
 
     def scale(self, data, project, params: ProcessorParams = None):
@@ -26,3 +30,6 @@ class Processor:
         if (self.reverseProcessor != None):
             self.reverseProcessor.saveData(
                 dataRecorder.getChild('reverseProcessor'))
+
+    def getSharedData(self, project) -> SharedData:
+        return project.sharedData.getOrCreate(self.sharedDataId)
