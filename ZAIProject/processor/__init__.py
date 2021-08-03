@@ -13,3 +13,5 @@ from ._classToIndex import ClassToIndex
 from ._indexToClass import IndexToClass
 from ._sparse import Sparse
 from ._reverseSparse import ReverseSparse
+from ._lambda import Lambda
+from ._output import Output

@@ -7,6 +7,7 @@ from ..utility._getMinValue import getMinValue
 from ..utility._getMaxValue import getMaxValue
 from ..base._ioInfo import IOInfo
 from ._sharedData import SharedData
+from ..data._defaultDataApplier import DefaultDataApplier
 
 
 class Project:
@@ -16,6 +17,7 @@ class Project:
         self.predict = ProjectPredict(self)
         self.modelInfo = ModelInfo()
         self.sharedData = SharedData()
+        self.dataApplier = DefaultDataApplier(self)
 
     def scale(self, data, verbose: bool = False):
         maxProgress = len(data)
