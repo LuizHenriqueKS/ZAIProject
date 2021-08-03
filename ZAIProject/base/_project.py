@@ -18,9 +18,9 @@ class Project:
     def scale(self, data, verbose: bool = False):
         maxProgress = len(data)
         currentProgress = 0
-        for i in data:
-            input = self.fit.input.applyOne(i)
-            output = self.fit.output.applyOne(i)
+        for one in data:
+            input = self.fit.input.applyOne(one)
+            output = self.fit.output.applyOne(one)
             for j in range(0, len(input)):
                 self.updateIOInfo(j, self.modelInfo.input, input)
             for j in range(0, len(output)):

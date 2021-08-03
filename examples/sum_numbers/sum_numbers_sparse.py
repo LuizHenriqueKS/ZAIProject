@@ -1,6 +1,6 @@
 import tensorflow as tf
-from tensorflow.python.ops.gen_array_ops import reverse
 import ZAIProject as ai
+import json
 
 samples = [
     "1+1=2",
@@ -17,18 +17,27 @@ samples = [
 project = ai.project.Project()
 
 project.fit.input.add().addAll([
-    ai.processor.RegExp(r"(\d+)\+(\d+)"),
-    ai.processor.ForEach(ai.processor.StrToInt())
+    ai.processor.RegExp(r"(.*)\=", joinGroups=True),
+    ai.processor.ForEach([
+        ai.processor.SplitStr(''),
+        ai.processor.ValueToIndex()
+    ])
 ])
 
 project.fit.output.add().addAll([
-    ai.processor.RegExp(r"\=(\d+)"),
-    ai.processor.ForEach(ai.processor.StrToInt())
+    ai.processor.RegExp(r"\=(\d+)", joinGroups=True),
+    ai.processor.ForEach([
+        ai.processor.JoinStr(''),
+        ai.processor.ValueToIndex(),
+        ai.processor.AutoPadding1D('right')
+    ])
 ])
 
 project.predict.baseFit()
 
 project.scale(samples, verbose=True)
+
+print('ModelInfo', project.modelInfo)
 
 tsModel = tf.keras.Sequential([
     tf.keras.layers.InputLayer(input_shape=[2]),
@@ -39,7 +48,7 @@ tsModel.compile(optimizer=tf.optimizers.Adam(0.001), loss='mse')
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000)
+model.fit(samples, epochs=10000, tillLoss=0)
 
 print('samples', samples)
 

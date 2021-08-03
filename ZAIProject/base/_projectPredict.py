@@ -9,8 +9,8 @@ class ProjectPredict:
         self.output: ProjectIOSet = ProjectIOSet(project)
 
     def baseFit(self):
-        for i in self.project.fit.input:
-            self.input.add().addAll(i)
-        for i in self.project.fit.output:
-            self.output.add().addAll(i.reverse())
+        for io in self.project.fit.input:
+            self.input.add().addAll(io)
+        for io in self.project.fit.output:
+            self.output.add().addAll(io.reverse())
         return self

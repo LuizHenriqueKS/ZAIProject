@@ -91,18 +91,18 @@ class TensorModel(Model):
 
     def convertToTensors(self, data):
         result = []
-        for i in data:
-            for j in range(0, len(i)):
-                if len(result) <= j:
+        for one in data:
+            for i in range(0, len(one)):
+                if len(result) <= i:
                     result.append([])
-                result[j].append(i[j])
+                result[i].append(one[i])
         return [tf.convert_to_tensor(i) for i in result]
 
     def buildCallbacks(self, callbacks=None, tillAccuracy: float = None, tillLoss: float = None):
         result = []
         if callbacks != None:
-            for i in callbacks:
-                result.append(i)
+            for callback in callbacks:
+                result.append(callback)
         if tillAccuracy != None or tillLoss != None:
             result.append(self.DefaultCallback(
                 self.model, tillAccuracy, tillLoss))

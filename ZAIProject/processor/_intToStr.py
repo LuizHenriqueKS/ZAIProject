@@ -12,7 +12,7 @@ class IntToStr(Processor):
 
     def apply(self, data, project=None, params=None):
         requireNumber(data)
-        return str(int(data))
+        return str(int(round(data)))
 
     def reverse(self):
         if self.reverseProcessor == None:

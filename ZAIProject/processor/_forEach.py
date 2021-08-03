@@ -1,28 +1,44 @@
+from tensorflow.python.ops.gen_array_ops import reverse
+from ZAIProject import processor
 from ..base._processor import Processor
 from ..validation._requireArray import requireArray
 
 
 class ForEach(Processor):
-    def __init__(self, processor: Processor, reverse=None):
+    def __init__(self, processores, reverse=None):
         super().__init__(reverse=reverse)
-        self.processor = processor
+        if isinstance(processores, Processor):
+            self.processores = [processores]
+        else:
+            self.processores = processores
 
     def scale(self, data, project, params):
         requireArray(data)
-        for i in data:
-            self.processor.scale(i, project, params)
+        for one in data:
+            processorResult = one
+            for processor in self.processores:
+                processorResult = processor.scale(
+                    processorResult, project, params)
 
     def apply(self, data, project, params):
         requireArray(data)
         result = []
-        for i in data:
-            i2 = self.processor.apply(i, project, params)
-            result.append(i2)
+        for one in data:
+            processorResult = one
+            for processor in self.processores:
+                processorResult = processor.apply(
+                    processorResult, project, params)
+            result.append(processorResult)
         return result
 
     def reverse(self):
-        return ForEach(self.processor.reverse())
+        reversedProcessores = [p.reverse() for p in self.processores]
+        reversedProcessores.reverse()
+        return ForEach(reversedProcessores)
 
     def saveData(self, dataRecorder) -> None:
         super().saveData(dataRecorder)
-        self.processor.saveData(dataRecorder.getChild('processor'))
+        for i in range(0, len(self.processores)):
+            processor = self.processores[i]
+            dataRecorderChild = dataRecorder.getChild(f'processor{i}')
+            processor.saveData(dataRecorderChild)

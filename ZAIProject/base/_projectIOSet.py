@@ -34,14 +34,14 @@ class ProjectIOSet:
 
     def applyOne(self, data):
         result = []
-        for i in self.ios:
-            result.append(i.applyOne(data))
+        for io in self.ios:
+            result.append(io.applyOne(data))
         return result
 
     def apply(self, data):
         result = []
-        for i in data:
-            result.append(self.applyOne(i))
+        for one in data:
+            result.append(self.applyOne(one))
         return result
 
     def applyPerIO(self, data):
