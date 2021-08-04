@@ -91,8 +91,10 @@ class TensorModel(Model):
       log = f'{data[i]} '
       ok = True
       for j in range(0, len(target[i])):
-        log += f'| {self.treatSingleOutput(target[i][j])} -> {self.treatSingleOutput(output[i][j])} '
-        ok = ok and target[i][j] == output[i][j]
+        tar = self.treatSingleOutput(target[i][j])
+        out = self.treatSingleOutput(output[i][j])
+        log += f'| {tar} -> {out} '
+        ok = ok and tar == out
       if ok:
         log += '| OK'
         oks += 1

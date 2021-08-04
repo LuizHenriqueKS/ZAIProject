@@ -33,22 +33,47 @@ class RecursiveDataApplier(DataApplier):
     return self.parentApplier.iterApplyPredictOutputOne(one)
 
   def runPredict(self, predictFunc, data, context):
-    outputs = []
     for one in data:
-      params = ProcessorParams(
-          mode='predict',
-          io="input",
-          contextIteration=0,
-          context=[[]]
-      )
-      while self.canContinuePredict(params):
+      yield self.runPredictOne(predictFunc, one, context, 'predict')
+
+  def runPredictOne(self, predictFunc, one, context, mode):
+    params = ProcessorParams(
+        mode=mode,
+        io="input",
+        contextIteration=0,
+        context=[[]]
+    )
+    while self.canContinuePredict(params):
+      if mode == 'predict':
         input = self.project.predict.input.applyOne(one, params)
-        modelOutput = predictFunc([input])[0]
-        context = self.recursive.convertOutputToContext(modelOutput)
-        self.updateContext(params, context)
-      output = self.recursive.getOutput(params)
-      outputs.append(output)
-    return self.applyPredictOutput(outputs)
+      elif mode == 'fit':
+        input = self.project.fit.input.applyOne(one, params)
+      else:
+        raise ValueError()
+      modelOutput = predictFunc([input])[0]
+      context = self.recursive.convertOutputToContext(modelOutput)
+      self.updateContext(params, context)
+    output = self.recursive.getOutput(params)
+    return self.parentApplier.applyPredictOutputOne(output)[0]
+
+  def runEvaluate(self, predictFunc, data, table):
+    input = self.applyFitInput(data)
+    target = self.applyFitTarget(data)
+    predictTarget = None
+    predictOutput = None
+    if table:
+      parentTarget = self.parentApplier.applyFitTarget(data)
+      predictTarget = self.parentApplier.applyPredictTarget(parentTarget)
+      predictOutput = []
+      for one in data:
+        oneOutput = self.runPredictOne(
+            predictFunc,
+            one,
+            context=None,
+            mode='fit'
+        )
+        predictOutput.append(oneOutput)
+    return (input, target, predictTarget, predictOutput)
 
   def canContinuePredict(self, params):
     return len(params.context[0]) < self.maxNumTargets

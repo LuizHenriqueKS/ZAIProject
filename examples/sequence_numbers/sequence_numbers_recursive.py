@@ -12,7 +12,7 @@ for i in range(0, 9):
 print(samples)
 
 project = ai.project.Project(
-    forceSingleValuePerOutput=True,
+    forceSingleValuePerOutput=False,
     verbose=2,
     recursive=ai.recursive.Sparse([2])
 )
