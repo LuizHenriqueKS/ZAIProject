@@ -7,10 +7,10 @@ import ZAIProject as ai
 samples = []
 
 for i in range(0, 9):
-    seq = [i]
-    for j in range(1, 6):
-        seq.append((i + j) % 10)
-    samples.append(seq)
+  seq = [i]
+  for j in range(1, 6):
+    seq.append((i + j) % 10)
+  samples.append(seq)
 
 print(samples)
 
@@ -58,4 +58,4 @@ dataset = dataset.batch(5)
 
 model.fitDataset(dataset, epochs=1000, tillAccuracy=1)
 
-model.evaluate(samples, verbose=True)
+model.evaluate(samples, table=True)

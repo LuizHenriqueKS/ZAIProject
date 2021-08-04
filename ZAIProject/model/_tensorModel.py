@@ -38,17 +38,17 @@ class TensorModel(Model):
     output = self.dataApplier.applyPredictOutput(modelOutput)
     return output
 
-  def evaluate(self, data, verbose: bool = False):
+  def evaluate(self, data, table: bool = False, verbose=1):
     modelInput = self.dataApplier.applyFitInput(data)
     modelTarget = self.dataApplier.applyFitTarget(data)
 
-    if verbose:
+    if table:
       modelOutput = self.model.predict(modelInput)
       target = self.dataApplier.applyPredictTarget(modelTarget)
       output = self.dataApplier.applyPredictOutput(modelOutput)
       self.printAccuracy(data, target, output)
 
-    return self.model.evaluate(modelInput, modelTarget)
+    return self.model.evaluate(modelInput, modelTarget, verbose=verbose)
 
   def printAccuracy(self, data, target, output):
     oks = 0

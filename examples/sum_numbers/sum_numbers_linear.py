@@ -42,4 +42,4 @@ model.fit(samples, epochs=10000, verbose=2, tillLoss=0)
 
 print('samples', samples)
 
-model.evaluate(samples, verbose=True)
+model.evaluate(samples, table=True)

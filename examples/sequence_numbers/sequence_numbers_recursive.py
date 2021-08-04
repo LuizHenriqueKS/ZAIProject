@@ -61,4 +61,4 @@ dataset = ai.dataset.TensorDataset(project, samples).prefetch(100).batch(100)
 
 model.fit(dataset, epochs=2000, tillAccuracy=1)
 
-model.evaluate(samples, verbose=True)
+model.evaluate(samples, table=True, verbose=2)
