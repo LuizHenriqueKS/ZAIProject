@@ -11,7 +11,10 @@ for i in range(0, 9):
 
 print(samples)
 
-project = ai.project.Project(recursive=ai.recursive.Sparse([2]))
+project = ai.project.Project(
+    forceSingleValuePerOutput=True,
+    recursive=ai.recursive.Sparse([2])
+)
 
 project.fit.input.add().addAll([
     ai.processor.Lambda(lambda i: i[:2])
@@ -65,3 +68,5 @@ dataset = ai.dataset.TensorDataset(project, samples).prefetch(100).batch(100)
 model.fit(dataset, epochs=2000, tillAccuracy=1)
 
 model.evaluate(samples, table=True, verbose=2)
+
+print('Predict', list(model.predict(samples[0])))

@@ -14,7 +14,7 @@ class TensorModel(Model):
     self.model = model
     self.dataApplier = TensorDataApplier(project, project.dataApplier())
 
-  def fit(self, data, epochs: int, verbose: int = 1, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
+  def fit(self, data, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
     if isinstance(data, tf.data.Dataset):
       return self.fitDataset(data, epochs, verbose, callbacks, tillAccuracy, tillLoss)
     modelInput = self.dataApplier.applyFitInput(data)
@@ -22,21 +22,31 @@ class TensorModel(Model):
     _callbacks = self.buildCallbacks(
         callbacks, tillAccuracy, tillLoss)
     return self.model.fit(modelInput, modelTarget, epochs=epochs,
-                          verbose=verbose,
+                          verbose=self.getVerbose(verbose),
                           callbacks=_callbacks)
 
-  def fitDataset(self, dataset, epochs: int, verbose: int = 1, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
+  def fitDataset(self, dataset, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
     _callbacks = self.buildCallbacks(
         callbacks, tillAccuracy, tillLoss)
     return self.model.fit(dataset, epochs=epochs,
-                          verbose=verbose,
+                          verbose=self.getVerbose(verbose),
                           callbacks=_callbacks)
 
-  def predict(self, data):
-    modelInput = self.dataApplier.applyPredictInput(data)
-    modelOutput = self.model.predict(modelInput)
-    output = self.dataApplier.applyPredictOutput(modelOutput)
-    return output
+  def predict(self, data, context=None):
+    result = self.dataApplier.runPredict(
+        self.dataApplier,
+        self.model.predict,
+        data,
+        context
+    )
+    for one in result:
+      yield self.treatSingleOutput(one)
+
+  def treatSingleOutput(self, one):
+    if self.project.forceSingleValuePerOutput:
+      while isinstance(one, list) and len(one) == 1:
+        one = one[0]
+    return one
 
   def evaluate(self, data, table: bool = False, verbose=1):
     modelInput = self.dataApplier.applyFitInput(data)
@@ -46,9 +56,15 @@ class TensorModel(Model):
       modelOutput = self.model.predict(modelInput)
       target = self.dataApplier.applyPredictTarget(modelTarget)
       output = self.dataApplier.applyPredictOutput(modelOutput)
+
       self.printAccuracy(data, target, output)
 
-    return self.model.evaluate(modelInput, modelTarget, verbose=verbose)
+    return self.model.evaluate(modelInput, modelTarget, verbose=self.getVerbose(verbose))
+
+  def getVerbose(self, verbose=None):
+    if verbose == None:
+      return self.project.verbose
+    return verbose
 
   def printAccuracy(self, data, target, output):
     oks = 0
@@ -56,7 +72,7 @@ class TensorModel(Model):
       log = f'{data[i]} '
       ok = True
       for j in range(0, len(target[i])):
-        log += f'| {target[i][j]} -> {output[i][j]} '
+        log += f'| {self.treatSingleOutput(target[i][j])} -> {self.treatSingleOutput(output[i][j])} '
         ok = ok and target[i][j] == output[i][j]
       if ok:
         log += '| OK'

@@ -1,5 +1,7 @@
+from tensorflow.python.ops.gen_array_ops import Reverse
 from ..base._recursive import Recursive
 from typing import List
+from ..processor._reverseSparse import ReverseSparse
 
 
 class Sparse(Recursive):
@@ -7,6 +9,19 @@ class Sparse(Recursive):
   def __init__(self, contextShape: List[int]):
     super().__init__()
     self.contextShape = contextShape
+    self.reverseSparseProcessor = ReverseSparse()
+
+  def convertOutputToContext(self, output):
+    return self.reverseSparseProcessor.apply(output)
+
+  def getOutput(self, params):
+    result = []
+    for io in range(0, len(params.context)):
+      result[io] = []
+      for output in params.context[io]:
+        for one in output:
+          result[io].append(one)
+    return result
 
   def splitTarget(self, target):
     hasData = True

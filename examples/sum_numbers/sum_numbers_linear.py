@@ -13,7 +13,7 @@ samples = [
     "9+1=10"
 ]
 
-project = ai.project.Project()
+project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(\d+)\+(\d+)"),
@@ -38,8 +38,18 @@ tsModel.compile(optimizer=tf.optimizers.Adam(0.001), loss='mse')
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000, verbose=2, tillLoss=0)
+model.fit(samples, epochs=10000, tillLoss=0)
 
 print('samples', samples)
 
 model.evaluate(samples, table=True)
+
+tests = [
+    '2+2=4',
+    '8+8=16',
+    '10+10=20'
+]
+
+model.evaluate(tests, table=True)
+
+print('Predict', list(model.predict(samples)))

@@ -18,7 +18,7 @@ samples = [
     "9+1=10"
 ]
 
-project = ai.project.Project()
+project = ai.project.Project(forceSingleValuePerOutput=True)
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(.*)\=", joinGroups=True),
@@ -30,7 +30,7 @@ project.fit.output.add().addAll([
     ai.processor.RegExp(r"\=(\d+)", joinGroups=True),
     ai.processor.SplitStr(''),
     ai.processor.ForEach(ai.processor.ValueToIndex()),
-    ai.processor.AutoPadding1D('right'),
+    ai.processor.AutoPadding1D(),
     ai.processor.Sparse()
 ])
 
@@ -67,3 +67,5 @@ model.fit(samples, epochs=10000, tillAccuracy=1)
 print('samples', samples)
 
 model.evaluate(samples, table=True, verbose=2)
+
+print('Predict', list(model.predict(samples)))

@@ -13,12 +13,14 @@ from ..data._recursiveDataApplier import RecursiveDataApplier
 
 class Project:
 
-  def __init__(self, recursive=None):
+  def __init__(self, verbose=1, forceSingleValuePerOutput=False, recursive=None):
     self.fit = ProjectFit(self)
     self.predict = ProjectPredict(self)
     self.modelInfo = ModelInfo()
     self.sharedData = SharedData()
+    self.forceSingleValuePerOutput = forceSingleValuePerOutput
     self._dataApplier = DefaultDataApplier(self)
+    self.verbose = verbose
     if recursive != None:
       self._dataApplier = RecursiveDataApplier(
           self,

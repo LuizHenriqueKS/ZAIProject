@@ -9,6 +9,7 @@ class RecursiveDataApplier(DataApplier):
     self.project = project
     self.parentApplier = parentApplier
     self.recursive = recursive
+    self.maxNumTargets = 0
 
   def iterScaleFitInputOne(self, one):
     return self.iterApplyInputOne(one, mode="scale")
@@ -31,6 +32,27 @@ class RecursiveDataApplier(DataApplier):
   def iterApplyPredictOutputOne(self, one):
     return self.parentApplier.iterApplyPredictOutputOne(one)
 
+  def runPredict(self, dataApplier, predictFunc, data, context):
+    outputs = []
+    for one in data:
+      params = ProcessorParams(
+          mode='predict',
+          io="input",
+          contextIteration=0,
+          context=[[]]
+      )
+      while self.canContinuePredict(params):
+        input = dataApplier.predict(one, params)
+        modelOutput = predictFunc([input])[0]
+        context = self.recursive.convertOutputToContext(modelOutput)
+        self.updateContext(params, context)
+      output = self.recursive.getOutput(params)
+      outputs.append(output)
+    return self.applyPredictOutput(outputs)
+
+  def canContinuePredict(self, params):
+    return len(params.context[0]) < self.maxNumTargets
+
   def splitIterTarget(self, iterTarget):
     fullTarget = next(iterTarget)
     return self.recursive.splitTarget(fullTarget)
@@ -45,6 +67,7 @@ class RecursiveDataApplier(DataApplier):
     input = self.projectApplyInputOne(mode, one, params)
     yield input
     targets = self.applyTargetOne(mode, one)
+    self.maxNumTargets = max(self.maxNumTargets, len(targets) - 1)
     for i in range(0, len(targets) - 1):
       target = targets[i]
       self.updateContext(params, target)
