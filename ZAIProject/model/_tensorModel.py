@@ -53,7 +53,7 @@ class TensorModel(Model):
   def printAccuracy(self, data, target, output):
     oks = 0
     for i in range(0, len(data)):
-      log = f'|{data[i]}'
+      log = f'{data[i]} '
       ok = True
       for j in range(0, len(target[i])):
         log += f'| {target[i][j]} -> {output[i][j]} '

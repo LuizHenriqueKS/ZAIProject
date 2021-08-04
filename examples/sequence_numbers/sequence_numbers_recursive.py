@@ -52,8 +52,11 @@ output = tf.keras.layers.TimeDistributed(
 )(output)
 
 tsModel = tf.keras.Model([input1, input2], output)
-tsModel.compile('adam', 'sparse_categorical_crossentropy',
-                ['sparse_categorical_accuracy'])
+tsModel.compile(
+    'adam',
+    'sparse_categorical_crossentropy',
+    ['sparse_categorical_accuracy']
+)
 
 model = ai.model.TensorModel(project, tsModel)
 
