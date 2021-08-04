@@ -6,7 +6,7 @@ samples = []
 for i in range(0, 9):
     seq = [i]
     for j in range(1, 6):
-        seq.append(i + j)
+        seq.append((i + j) % 10)
     samples.append(seq)
 
 print(samples)

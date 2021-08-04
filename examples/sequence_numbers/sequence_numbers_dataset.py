@@ -9,7 +9,7 @@ samples = []
 for i in range(0, 9):
     seq = [i]
     for j in range(1, 6):
-        seq.append(i + j)
+        seq.append((i + j) % 10)
     samples.append(seq)
 
 print(samples)
@@ -49,6 +49,13 @@ tsModel.compile(optimizer='adam',
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=1000, tillAccuracy=1)
+dataset = ai.dataset.TensorDataset(project, samples)
+
+print('First input', next(dataset.as_numpy_iterator())[0])
+print('First output', next(dataset.as_numpy_iterator())[1])
+
+dataset = dataset.batch(5)
+
+model.fitDataset(dataset, epochs=1000, tillAccuracy=1)
 
 model.evaluate(samples, verbose=True)

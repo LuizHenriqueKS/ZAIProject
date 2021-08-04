@@ -19,6 +19,12 @@ class TensorDataApplier(DataApplier):
         tensors = self.convertToTensors(raw)
         return tensors
 
+    def iterFitInput(self, data):
+        return self.parentApplier.iterFitInput(data)
+
+    def iterFitTarget(self, data):
+        return self.parentApplier.iterFitTarget(data)
+
     def applyPredictInput(self, data):
         raw = self.parentApplier.applyPredictInput(data)
         tensors = self.convertToTensors(raw)
@@ -32,7 +38,10 @@ class TensorDataApplier(DataApplier):
             data = modelOutput.tolist()
             if len(self.project.predict.output) == 1:
                 data = [data]
-        return self.parentApplier.applyPredictOutput(data, io)
+        result = self.parentApplier.applyPredictOutput(data, io)
+        if not isinstance(result, list):
+            result = [result]
+        return result
 
     def isTensorModelOutput(self, data):
         return type(data).__name__ == 'ndarray'

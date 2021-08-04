@@ -4,3 +4,4 @@ from . import processor
 from . import validation
 from . import error
 from . import model
+from . import dataset

@@ -12,7 +12,7 @@ class TensorModel(Model):
     def __init__(self, project: Project, model: tf.keras.Model):
         self.project = project
         self.model = model
-        self.dataApplier = TensorDataApplier(project, project.dataApplier)
+        self.dataApplier = TensorDataApplier(project, project.dataApplier())
 
     def fit(self, data, epochs: int, verbose: int = 1, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
         modelInput = self.dataApplier.applyFitInput(data)
@@ -20,6 +20,13 @@ class TensorModel(Model):
         _callbacks = self.buildCallbacks(
             callbacks, tillAccuracy, tillLoss)
         return self.model.fit(modelInput, modelTarget, epochs=epochs,
+                              verbose=verbose,
+                              callbacks=_callbacks)
+
+    def fitDataset(self, dataset, epochs: int, verbose: int = 1, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
+        _callbacks = self.buildCallbacks(
+            callbacks, tillAccuracy, tillLoss)
+        return self.model.fit(dataset, epochs=epochs,
                               verbose=verbose,
                               callbacks=_callbacks)
 
@@ -71,7 +78,7 @@ class TensorModel(Model):
             self.tillAccuracy = tillAccuracy
             self.tillLoss = tillLoss
             self.accuracyReadable = True
-            self.accuracyName = None
+            self.accuracyNames = None
 
         def on_epoch_end(self, epoch=None, logs=None):
             if self.tillAccuracy != None:
@@ -85,15 +92,22 @@ class TensorModel(Model):
 
         def getAccuracy(self, logs):
             if self.accuracyReadable:
-                if self.accuracyName == None:
-                    self.accuracyName = self.getAccuracyName(logs)
-                    if self.accuracyName == None:
+                if self.accuracyNames == None:
+                    self.accuracyNames = self.getAccuracyNames(logs)
+                    if self.accuracyNames == None:
                         self.accuracyReadable = False
                 if self.accuracyReadable:
-                    return logs[self.accuracyName]
+                    result = 1
+                    for name in self.accuracyNames:
+                        result *= logs[name]
+                    return result
 
-        def getAccuracyName(self, logs):
+        def getAccuracyNames(self, logs):
             keys = logs.keys()
+            result = []
             for key in keys:
                 if 'accuracy' in key:
-                    return key
+                    result.append(key)
+            if len(result) == 0:
+                return None
+            return result

@@ -17,7 +17,7 @@ class Project:
         self.predict = ProjectPredict(self)
         self.modelInfo = ModelInfo()
         self.sharedData = SharedData()
-        self.dataApplier = DefaultDataApplier(self)
+        self._dataApplier = DefaultDataApplier(self)
 
     def scale(self, data, verbose: bool = False):
         maxProgress = len(data)
@@ -37,6 +37,27 @@ class Project:
         if len(ioInfo) <= index:
             ioInfo.append(IOInfo())
         ioInfo[index].shape = getMaxShape(
-            getShape(data[index]), ioInfo[index].shape)
-        ioInfo[index].minValue = getMinValue(data[index])
-        ioInfo[index].maxValue = getMaxValue(data[index])
+            getShape(data[index]),
+            ioInfo[index].shape
+        )
+        ioInfo[index].minValue = self.myMin(
+            getMinValue(data[index]),
+            ioInfo[index].minValue
+        )
+        ioInfo[index].maxValue = self.myMax(
+            getMaxValue(data[index]),
+            ioInfo[index].maxValue
+        )
+
+    def myMin(self, a, b):
+        if b == None:
+            return a
+        return min([a, b])
+
+    def myMax(self, a, b):
+        if b == None:
+            return a
+        return max([a, b])
+
+    def dataApplier(self):
+        return self._dataApplier

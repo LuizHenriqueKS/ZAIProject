@@ -12,7 +12,7 @@ class ReverseSparse(Processor):
     def apply(self, data, project, params):
         if params.io != 'target':
             if isFloat(data[0]):
-                return getBestIndex(data)
+                return [getBestIndex(data)]
             else:
                 requireNumberArray(data[0])
                 return [getBestIndex(i) for i in data]

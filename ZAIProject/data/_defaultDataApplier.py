@@ -18,6 +18,16 @@ class DefaultDataApplier(DataApplier):
         result = self.project.fit.output.apply(data, params)
         return result
 
+    def iterFitInput(self, data):
+        params = ProcessorParams(mode='fit', io='input')
+        for one in data:
+            yield self.project.fit.input.applyOne(one, params)
+
+    def iterFitTarget(self, data):
+        params = ProcessorParams(mode='fit', io='target')
+        for one in data:
+            yield self.project.fit.output.applyOne(one, params)
+
     def applyPredictInput(self, data):
         params = ProcessorParams(mode='predict', io='input')
         result = self.project.predict.input.apply(data, params)
