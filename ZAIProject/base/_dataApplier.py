@@ -21,7 +21,7 @@ class DataApplier:
   def iterApplyPredictOutputOne(self, one):
     raise NotImplementedError()
 
-  def runPredict(self, dataApplier, predictFunc, data, context):
+  def runPredict(self, predictFunc, data, context):
     raise NotImplementedError()
 
   def iterApplyFitInput(self, data):

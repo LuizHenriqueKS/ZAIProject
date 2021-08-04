@@ -36,8 +36,8 @@ class DefaultDataApplier(DataApplier):
     params = ProcessorParams(mode='predict', io='output')
     yield self.project.predict.output.applyOnePerIO(one, params)
 
-  def runPredict(self, dataApplier, predictFunc, data, context):
-    modelInput = dataApplier.applyPredictInput(data)
+  def runPredict(self, predictFunc, data, context):
+    modelInput = self.applyPredictInput(data)
     modelOutput = predictFunc(modelInput)
-    output = dataApplier.applyPredictOutput(modelOutput)
+    output = self.applyPredictOutput(modelOutput)
     return output

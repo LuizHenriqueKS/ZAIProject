@@ -3,7 +3,8 @@ from ..base._model import Model
 from ..base._project import Project
 from typing import List
 from ..utility._getShape import getShape
-from ..data._tensorDataApplier import TensorDataApplier
+from ._tensorDataHelper import *
+from ._defaultTensorCallback import DefaultTensorCallback
 import tensorflow as tf
 
 
@@ -12,30 +13,46 @@ class TensorModel(Model):
   def __init__(self, project: Project, model: tf.keras.Model):
     self.project = project
     self.model = model
-    self.dataApplier = TensorDataApplier(project, project.dataApplier())
+
+  def dataApplier(self):
+    return self.project.dataApplier()
 
   def fit(self, data, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
     if isinstance(data, tf.data.Dataset):
       return self.fitDataset(data, epochs, verbose, callbacks, tillAccuracy, tillLoss)
-    modelInput = self.dataApplier.applyFitInput(data)
-    modelTarget = self.dataApplier.applyFitTarget(data)
+    input = self.dataApplier().applyFitInput(data)
+    target = self.dataApplier().applyFitTarget(data)
+    modelInput = convertToTensors(input)
+    modelTarget = convertToTensors(target)
     _callbacks = self.buildCallbacks(
-        callbacks, tillAccuracy, tillLoss)
-    return self.model.fit(modelInput, modelTarget, epochs=epochs,
+        callbacks,
+        tillAccuracy,
+        tillLoss
+    )
+    return self.model.fit(modelInput,
+                          modelTarget,
+                          epochs=epochs,
                           verbose=self.getVerbose(verbose),
                           callbacks=_callbacks)
 
   def fitDataset(self, dataset, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
     _callbacks = self.buildCallbacks(
-        callbacks, tillAccuracy, tillLoss)
-    return self.model.fit(dataset, epochs=epochs,
+        callbacks,
+        tillAccuracy,
+        tillLoss
+    )
+    return self.model.fit(dataset,
+                          epochs=epochs,
                           verbose=self.getVerbose(verbose),
                           callbacks=_callbacks)
 
   def predict(self, data, context=None):
-    result = self.dataApplier.runPredict(
-        self.dataApplier,
-        self.model.predict,
+    def myPredict(input):
+      modelInput = convertToTensors(input)
+      modelOutput = self.model.predict(modelInput)
+      return convertFromTensors(self.project, modelOutput)
+    result = self.dataApplier().runPredict(
+        myPredict,
         data,
         context
     )
@@ -49,13 +66,17 @@ class TensorModel(Model):
     return one
 
   def evaluate(self, data, table: bool = False, verbose=1):
-    modelInput = self.dataApplier.applyFitInput(data)
-    modelTarget = self.dataApplier.applyFitTarget(data)
+    input = self.dataApplier().applyFitInput(data)
+    target = self.dataApplier().applyFitTarget(data)
+
+    modelInput = convertToTensors(input)
+    modelTarget = convertToTensors(target)
 
     if table:
       modelOutput = self.model.predict(modelInput)
-      target = self.dataApplier.applyPredictTarget(modelTarget)
-      output = self.dataApplier.applyPredictOutput(modelOutput)
+      preOutput = convertFromTensors(self.project, modelOutput)
+      target = self.dataApplier().applyPredictTarget(target)
+      output = self.dataApplier().applyPredictOutput(preOutput)
 
       self.printAccuracy(data, target, output)
 
@@ -88,47 +109,11 @@ class TensorModel(Model):
       for callback in callbacks:
         result.append(callback)
     if tillAccuracy != None or tillLoss != None:
-      result.append(self.DefaultCallback(
-          self.model, tillAccuracy, tillLoss))
+      result.append(
+          DefaultTensorCallback(
+              self.model,
+              tillAccuracy,
+              tillLoss
+          )
+      )
     return result
-
-  class DefaultCallback(tf.keras.callbacks.Callback):
-
-    def __init__(self, model: tf.keras.Model, tillAccuracy=None, tillLoss=None):
-      self.model = model
-      self.tillAccuracy = tillAccuracy
-      self.tillLoss = tillLoss
-      self.accuracyReadable = True
-      self.accuracyNames = None
-
-    def on_epoch_end(self, epoch=None, logs=None):
-      if self.tillAccuracy != None:
-        accuracy = self.getAccuracy(logs)
-        if accuracy != None:
-          if accuracy >= self.tillAccuracy:
-            self.model.stop_training = True
-      if self.tillLoss != None:
-        if logs['loss'] <= self.tillLoss:
-          self.model.stop_training = True
-
-    def getAccuracy(self, logs):
-      if self.accuracyReadable:
-        if self.accuracyNames == None:
-          self.accuracyNames = self.getAccuracyNames(logs)
-          if self.accuracyNames == None:
-            self.accuracyReadable = False
-        if self.accuracyReadable:
-          result = 1
-          for name in self.accuracyNames:
-            result *= logs[name]
-          return result
-
-    def getAccuracyNames(self, logs):
-      keys = logs.keys()
-      result = []
-      for key in keys:
-        if 'accuracy' in key:
-          result.append(key)
-      if len(result) == 0:
-        return None
-      return result

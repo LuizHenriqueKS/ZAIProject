@@ -14,7 +14,7 @@ samples = [
     "9 1=10,8"
 ]
 
-project = ai.project.Project()
+project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(\d+) (\d+)"),
@@ -38,13 +38,14 @@ project.scale(samples, verbose=True)
 tsModelInput = tf.keras.layers.Input(shape=[2])
 tsModelOutput1 = tf.keras.layers.Dense(10)(tsModelInput)
 tsModelOutput1 = tf.keras.layers.Dense(1)(tsModelOutput1)
-tsModelOutput2 = tf.keras.layers.Dense(1)(tsModelInput)
+tsModelOutput2 = tf.keras.layers.Dense(10)(tsModelInput)
+tsModelOutput2 = tf.keras.layers.Dense(1)(tsModelOutput2)
 tsModel = tf.keras.Model(tsModelInput, [tsModelOutput1, tsModelOutput2])
 tsModel.compile(optimizer='adam', loss='mse')
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(samples, epochs=10000, verbose=2)
+model.fit(samples, epochs=10000)
 
 print('samples', samples)
 
