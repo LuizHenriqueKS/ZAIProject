@@ -1,2 +1,4 @@
 class Recursive:
-    pass
+
+  def splitTarget(self, target):
+    raise NotImplementedError()

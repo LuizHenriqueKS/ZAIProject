@@ -4,14 +4,14 @@ import ZAIProject as ai
 samples = []
 
 for i in range(0, 9):
-    seq = [i]
-    for j in range(1, 6):
-        seq.append((i + j) % 10)
-    samples.append(seq)
+  seq = [i]
+  for j in range(1, 6):
+    seq.append((i + j) % 10)
+  samples.append(seq)
 
 print(samples)
 
-project = ai.project.Project(recursive=ai.recursive.Sparse(2))
+project = ai.project.Project(recursive=ai.recursive.Sparse([2]))
 
 project.fit.input.add().addAll([
     ai.processor.Lambda(lambda i: i[:2])
@@ -24,7 +24,8 @@ project.fit.input.add().addAll([
 
 project.fit.output.add().addAll([
     ai.processor.Lambda(lambda i: i[2:]),
-    ai.processor.AutoPadding1D()
+    ai.processor.AutoPadding1D(),
+    ai.processor.Sparse()
 ])
 
 project.predict.baseFit()
@@ -38,20 +39,26 @@ input1 = tf.keras.layers.Input(shape=[2])
 
 input2 = tf.keras.layers.Input(shape=[2])
 
+inputDim = 11
+outputDim = 11
+
 output = tf.keras.layers.Concatenate()([input1, input2])
-output = tf.keras.layers.Embedding(10, 10)(output)
+output = tf.keras.layers.Embedding(inputDim, 10)(output)
 output = tf.keras.layers.Flatten()(output)
 output = tf.keras.layers.Dense(20, activation='relu')(output)
 output = tf.keras.layers.Reshape([2, 10])(output)
 output = tf.keras.layers.TimeDistributed(
-    tf.keras.layers.Dense(11, activation='softmax')
+    tf.keras.layers.Dense(outputDim, activation='softmax')
 )(output)
 
-
 tsModel = tf.keras.Model([input1, input2], output)
+tsModel.compile('adam', 'sparse_categorical_crossentropy',
+                ['sparse_categorical_accuracy'])
 
 model = ai.model.TensorModel(project, tsModel)
 
-model.fit(output, epochs=2000, tillAccuracy=1)
+dataset = ai.dataset.TensorDataset(project, samples).prefetch(100).batch(100)
 
-model.evaluate(samples)
+model.fit(dataset, epochs=2000, tillAccuracy=1)
+
+model.evaluate(samples, verbose=True)

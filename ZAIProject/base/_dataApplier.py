@@ -1,77 +1,83 @@
 class DataApplier:
 
-    def iterScaleFitInputOne(self, one):
-        raise NotImplementedError()
+  def iterScaleFitInputOne(self, one):
+    raise NotImplementedError()
 
-    def iterScaleFitTargetOne(self, one):
-        raise NotImplementedError()
+  def iterScaleFitTargetOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyFitInputOne(self, one):
-        raise NotImplementedError()
+  def iterApplyFitInputOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyFitTargetOne(self, one):
-        raise NotImplementedError()
+  def iterApplyFitTargetOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyPredictInputOne(self, one):
-        raise NotImplementedError()
+  def iterApplyPredictInputOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyPredictTargetOne(self, one):
-        raise NotImplementedError()
+  def iterApplyPredictTargetOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyPredictOutputOne(self, one):
-        raise NotImplementedError()
+  def iterApplyPredictOutputOne(self, one):
+    raise NotImplementedError()
 
-    def iterApplyFitInput(self, data):
-        for one in data:
-            for input in self.iterApplyFitInputOne(one):
-                yield input
+  def iterApplyFitInput(self, data):
+    for one in data:
+      for input in self.iterApplyFitInputOne(one):
+        yield input
 
-    def iterApplyFitTarget(self, data):
-        for one in data:
-            for target in self.iterApplyFitTargetOne(one):
-                yield target
+  def iterApplyFitTarget(self, data):
+    for one in data:
+      for target in self.iterApplyFitTargetOne(one):
+        yield target
 
-    def iterApplyPredictInput(self, data):
-        for one in data:
-            for input in self.iterApplyPredictInputOne(one):
-                yield input
+  def iterApplyPredictInput(self, data):
+    for one in data:
+      for input in self.iterApplyPredictInputOne(one):
+        yield input
 
-    def iterApplyPredictTarget(self, data):
-        for one in data:
-            for target in self.iterApplyPredictTargetOne(one):
-                yield target
+  def iterApplyPredictTarget(self, data):
+    for one in data:
+      for target in self.iterApplyPredictTargetOne(one):
+        yield target
 
-    def iterApplyPredictOutput(self, data):
-        for one in data:
-            for output in self.iterApplyPredictOutputOne(one):
-                yield output
+  def iterApplyPredictOutput(self, data):
+    for one in data:
+      for output in self.iterApplyPredictOutputOne(one):
+        yield output
 
-    def applyFitInput(self, data):
-        return list(self.iterApplyFitInput(data))
+  def scaleFitInputOne(self, one):
+    return list(self.iterScaleFitInputOne(one))
 
-    def applyFitInputOne(self, one):
-        return list(self.iterApplyFitInputOne(one))
+  def scaleFitTargetOne(self, one):
+    return list(self.iterScaleFitTargetOne(one))
 
-    def applyFitTarget(self, data):
-        return list(self.iterApplyFitTarget(data))
+  def applyFitInput(self, data):
+    return list(self.iterApplyFitInput(data))
 
-    def applyFitTargetOne(self, one):
-        return list(self.iterApplyFitTargetOne(one))
+  def applyFitInputOne(self, one):
+    return list(self.iterApplyFitInputOne(one))
 
-    def applyPredictInput(self, data):
-        return list(self.iterApplyPredictInput(data))
+  def applyFitTarget(self, data):
+    return list(self.iterApplyFitTarget(data))
 
-    def applyPredictInputOne(self, data):
-        return list(self.iterApplyPredictInputOne(data))
+  def applyFitTargetOne(self, one):
+    return list(self.iterApplyFitTargetOne(one))
 
-    def applyPredictTarget(self, data):
-        return list(self.iterApplyPredictTarget(data))
+  def applyPredictInput(self, data):
+    return list(self.iterApplyPredictInput(data))
 
-    def applyPredictTargetOne(self, data):
-        return list(self.iterApplyPredictTargetOne(data))
+  def applyPredictInputOne(self, data):
+    return list(self.iterApplyPredictInputOne(data))
 
-    def applyPredictOutput(self, data):
-        return list(self.iterApplyPredictOutput(data))
+  def applyPredictTarget(self, data):
+    return list(self.iterApplyPredictTarget(data))
 
-    def applyPredictOutputOne(self, data):
-        return list(self.iterApplyPredictOutputOne(data))
+  def applyPredictTargetOne(self, data):
+    return list(self.iterApplyPredictTargetOne(data))
+
+  def applyPredictOutput(self, data):
+    return list(self.iterApplyPredictOutput(data))
+
+  def applyPredictOutputOne(self, data):
+    return list(self.iterApplyPredictOutputOne(data))
