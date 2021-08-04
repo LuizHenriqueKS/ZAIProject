@@ -1,8 +1,4 @@
 import tensorflow as tf
-from tensorflow.keras import layers
-from tensorflow.python.keras import activations
-from tensorflow.python.keras.layers.core import Flatten
-from tensorflow.python.ops.gen_array_ops import shape
 import ZAIProject as ai
 
 samples = []
@@ -54,9 +50,9 @@ middle = tf.keras.layers.Flatten()(middle)
 middle = tf.keras.layers.Dense(10, activation='relu')(middle)
 
 output1 = tf.keras.layers.Dense(outputDim, activation='softmax')(middle)
-output1 = tf.keras.layers.RepeatVector(1)(output1)
+#output1 = tf.keras.layers.RepeatVector(1)(output1)
 output2 = tf.keras.layers.Dense(outputDim, activation='softmax')(middle)
-output2 = tf.keras.layers.RepeatVector(1)(output2)
+#output2 = tf.keras.layers.RepeatVector(1)(output2)
 
 tsModel = tf.keras.Model([input1, input2], [output1, output2])
 
@@ -66,7 +62,11 @@ tsModel.compile(optimizer='adam',
 
 model = ai.model.TensorModel(project, tsModel)
 
-dataset = ai.dataset.TensorDataset(project, samples)
+dataset = ai.dataset.TensorDataset(
+    project,
+    samples,
+    singleOutputs=[True, True]
+)
 
 print('First input', next(dataset.as_numpy_iterator())[0])
 print('First output', next(dataset.as_numpy_iterator())[1])

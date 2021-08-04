@@ -12,7 +12,7 @@ from ..data._defaultDataApplier import DefaultDataApplier
 
 class Project:
 
-    def __init__(self):
+    def __init__(self, recursive=None):
         self.fit = ProjectFit(self)
         self.predict = ProjectPredict(self)
         self.modelInfo = ModelInfo()

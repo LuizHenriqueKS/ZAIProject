@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-def readSamples(project, samples):
+def readSamples(project, samples, singleOutputs):
     def reader():
         inputIter = iter(project.dataApplier().iterFitInput(samples))
         targetIter = iter(project.dataApplier().iterFitTarget(samples))
@@ -13,16 +13,22 @@ def readSamples(project, samples):
                 input = tuple(input)
             if len(project.modelInfo.output) == 1:
                 target = target[0]
+                if singleOutputs != None and singleOutputs[0]:
+                    target = target[0]
             else:
+                if singleOutputs != None:
+                    for i in range(0, len(target)):
+                        if singleOutputs[i]:
+                            target[i] = target[i][0]
                 target = tuple(target)
             yield input, target
     return reader
 
 
-def TensorDataset(project, samples):
+def TensorDataset(project, samples, singleOutputs=None):
     #print(next(iter(readSamples(project, samples)())))
     dataset = tf.data.Dataset.from_generator(
-        readSamples(project, samples),
+        readSamples(project, samples, singleOutputs),
         buildOutputShapes(project)
     )
     return dataset
