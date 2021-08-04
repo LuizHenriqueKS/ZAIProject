@@ -19,29 +19,42 @@ class TensorDataApplier(DataApplier):
         tensors = self.convertToTensors(raw)
         return tensors
 
-    def iterFitInput(self, data):
-        return self.parentApplier.iterFitInput(data)
-
-    def iterFitTarget(self, data):
-        return self.parentApplier.iterFitTarget(data)
-
     def applyPredictInput(self, data):
         raw = self.parentApplier.applyPredictInput(data)
         tensors = self.convertToTensors(raw)
         return tensors
 
-    def applyPredictOutput(self, modelOutput, io: str):
+    def applyPredictTarget(self, modelOutput):
+        return self.applyPredictTargetOutput(modelOutput, io='target')
+
+    def applyPredictOutput(self, modelOutput):
+        return self.applyPredictTargetOutput(modelOutput, io='output')
+
+    def applyPredictTargetOutput(self, modelOutput, io: str):
         data = []
         if isinstance(modelOutput, list):
             data = [self.convertTensorToList(i) for i in modelOutput]
-        if self.isTensorModelOutput(modelOutput):  # tensor model output
+        if self.isTensorModelOutput(modelOutput):
             data = modelOutput.tolist()
             if len(self.project.predict.output) == 1:
                 data = [data]
-        result = self.parentApplier.applyPredictOutput(data, io)
+        data = list(self.iterTransposePerIO(data))
+        if io == 'output':
+            result = self.parentApplier.applyPredictOutput(data)
+        else:
+            result = self.parentApplier.applyPredictTarget(data)
         if not isinstance(result, list):
             result = [result]
         return result
+
+    def iterTransposePerIO(self, data):
+        if len(data) != 0:
+            dataLength = len(data[0])
+            for i in range(0, dataLength):
+                one = []
+                for ioData in data:
+                    one.append(ioData[i])
+                yield one
 
     def isTensorModelOutput(self, data):
         return type(data).__name__ == 'ndarray'

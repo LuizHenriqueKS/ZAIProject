@@ -3,8 +3,8 @@ import tensorflow as tf
 
 def readSamples(project, samples, singleOutputs):
     def reader():
-        inputIter = iter(project.dataApplier().iterFitInput(samples))
-        targetIter = iter(project.dataApplier().iterFitTarget(samples))
+        inputIter = iter(project.dataApplier().iterApplyFitInput(samples))
+        targetIter = iter(project.dataApplier().iterApplyFitTarget(samples))
         for input in inputIter:
             target = next(targetIter)
             if len(project.modelInfo.input) == 1:

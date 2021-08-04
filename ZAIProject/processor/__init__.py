@@ -9,9 +9,10 @@ from ._round import Round
 from ._indexToValue import IndexToValue
 from ._valueToIndex import ValueToIndex
 from ._autoPadding1D import AutoPadding1D
+from ._eraser1D import Eraser1D
 from ._classToIndex import ClassToIndex
 from ._indexToClass import IndexToClass
 from ._sparse import Sparse
 from ._reverseSparse import ReverseSparse
 from ._lambda import Lambda
-from ._output import Output
+from ._context import Context

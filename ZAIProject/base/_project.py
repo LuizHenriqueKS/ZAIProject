@@ -8,6 +8,7 @@ from ..utility._getMaxValue import getMaxValue
 from ..base._ioInfo import IOInfo
 from ._sharedData import SharedData
 from ..data._defaultDataApplier import DefaultDataApplier
+from ..data._recursiveDataApplier import RecursiveDataApplier
 
 
 class Project:
@@ -18,17 +19,23 @@ class Project:
         self.modelInfo = ModelInfo()
         self.sharedData = SharedData()
         self._dataApplier = DefaultDataApplier(self)
+        if recursive != None:
+            self._dataApplier = RecursiveDataApplier(
+                self,
+                self._dataApplier,
+                recursive
+            )
 
     def scale(self, data, verbose: bool = False):
         maxProgress = len(data)
         currentProgress = 0
         for one in data:
-            input = self.fit.input.scaleOne(one)
-            output = self.fit.output.scaleOne(one)
-            for j in range(0, len(input)):
-                self.updateIOInfo(j, self.modelInfo.input, input)
-            for j in range(0, len(output)):
-                self.updateIOInfo(j, self.modelInfo.output, output)
+            for input in self.dataApplier().iterScaleFitInputOne(one):
+                for j in range(0, len(input)):
+                    self.updateIOInfo(j, self.modelInfo.input, input)
+            for output in self.dataApplier().iterScaleFitTargetOne(one):
+                for j in range(0, len(output)):
+                    self.updateIOInfo(j, self.modelInfo.output, output)
             currentProgress += 1
             if (verbose):
                 print(f'{currentProgress}/{maxProgress} Scaling...')

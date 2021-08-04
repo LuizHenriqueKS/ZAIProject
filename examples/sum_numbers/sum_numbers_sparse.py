@@ -38,6 +38,9 @@ project.predict.baseFit()
 
 project.scale(samples, verbose=True)
 
+print('First input', project.dataApplier().applyFitInputOne(samples[0]))
+print('First target', project.dataApplier().applyFitTargetOne(samples[0]))
+
 inputShape = project.modelInfo.input[0].shape
 inputDim = project.modelInfo.input[0].maxValue + 1
 outputDim = project.modelInfo.output[0].maxValue + 2
@@ -50,7 +53,8 @@ tsModel = tf.keras.Sequential([
     tf.keras.layers.RepeatVector(2),
     tf.keras.layers.GRU(10, return_sequences=True),
     tf.keras.layers.TimeDistributed(
-        tf.keras.layers.Dense(outputDim, activation='softmax'))
+        tf.keras.layers.Dense(outputDim, activation='softmax')
+    )
 ])
 tsModel.compile(optimizer='adam', loss='sparse_categorical_crossentropy',
                 metrics=['sparse_categorical_accuracy'])

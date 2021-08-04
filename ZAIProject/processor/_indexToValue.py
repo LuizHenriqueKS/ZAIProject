@@ -1,6 +1,6 @@
 from ..base._processor import Processor
 from ..validation._requireInt import requireInt
-from ..validation._requireFloatArray import requireFloatArray
+from ..validation._requireNumberArray import requireNumberArray
 from ..utility._getBestIndex import getBestIndex
 
 
@@ -16,7 +16,7 @@ class IndexToValue(Processor):
     def apply(self, data, project, params=None):
         dict = self.getDict(project)
         if isinstance(data, list):
-            requireFloatArray(data)
+            requireNumberArray(data)
             data = getBestIndex(data)
         requireInt(data)
         index = dict[data]

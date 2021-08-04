@@ -59,3 +59,10 @@ class ProjectIOSet:
                 ioResult = self.ios[i].applyOne(data[i][j], params)
                 result[i].append(ioResult)
         return result
+
+    def applyOnePerIO(self, data, params=None):
+        result = []
+        for i in range(0, len(self.ios)):
+            ioResult = self.ios[i].applyOne(data[i], params)
+            result.append(ioResult)
+        return result

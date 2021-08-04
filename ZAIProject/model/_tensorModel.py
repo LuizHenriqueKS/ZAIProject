@@ -33,7 +33,7 @@ class TensorModel(Model):
     def predict(self, data):
         modelInput = self.dataApplier.applyPredictInput(data)
         modelOutput = self.model.predict(modelInput)
-        output = self.dataApplier.applyPredictOutput(modelOutput, 'output')
+        output = self.dataApplier.applyPredictOutput(modelOutput)
         return output
 
     def evaluate(self, data, verbose: bool = False):
@@ -41,16 +41,15 @@ class TensorModel(Model):
         modelTarget = self.dataApplier.applyFitTarget(data)
 
         if verbose:
-            modelOutput = self.model.predict(modelInput)
-            target = self.dataApplier.applyPredictOutput(modelTarget, 'target')
-            output = self.dataApplier.applyPredictOutput(modelOutput, 'output')
+            target = self.dataApplier.applyPredictTarget(modelTarget)
+            output = self.predict(data)
             oks = 0
             for i in range(0, len(data)):
                 log = f'|{data[i]}'
                 ok = True
-                for j in range(0, len(target)):
-                    log += f'| {target[j][i]} -> {output[j][i]} '
-                    ok = ok and target[j][i] == output[j][i]
+                for j in range(0, len(target[i])):
+                    log += f'| {target[i][j]} -> {output[i][j]} '
+                    ok = ok and target[i][j] == output[i][j]
                 if ok:
                     log += '| OK'
                     oks += 1

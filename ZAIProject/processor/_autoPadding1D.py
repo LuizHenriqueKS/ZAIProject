@@ -24,8 +24,8 @@ class AutoPadding1D(Processor):
     def reverse(self):
         if self.reverseProcessor != None:
             return self.reverseProcessor
-        from ._slice1D import Slice1D
-        return Slice1D(direction=self.direction, value=self.value, sharedDataId=self.sharedDataId)
+        from ._eraser1D import Eraser1D
+        return Eraser1D(direction=self.direction, value=self.value, sharedDataId=self.sharedDataId)
 
     def saveData(self, dataRecorder) -> None:
         super().saveData(dataRecorder)

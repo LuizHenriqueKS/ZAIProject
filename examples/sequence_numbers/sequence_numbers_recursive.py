@@ -18,15 +18,21 @@ project.fit.input.add().addAll([
 ])
 
 project.fit.input.add().addAll([
-    ai.processor.Output(0),
+    ai.processor.Context(0),
     ai.processor.AutoPadding1D()
 ])
 
 project.fit.output.add().addAll([
-    ai.processor.Lambda(lambda i: i[2:])
+    ai.processor.Lambda(lambda i: i[2:]),
+    ai.processor.AutoPadding1D()
 ])
 
 project.predict.baseFit()
+
+project.scale(samples, verbose=True)
+
+print('First input', project.dataApplier().applyFitInputOne(samples[0]))
+print('First target', project.dataApplier().applyFitTargetOne(samples[0]))
 
 input1 = tf.keras.layers.Input(shape=[2])
 
