@@ -47,40 +47,38 @@ class TensorModel(Model):
                           callbacks=_callbacks)
 
   def predict(self, data, context=None):
-    def myPredict(input):
-      modelInput = convertToTensors(input)
-      modelOutput = self.model.predict(modelInput)
-      return convertFromTensors(self.project, modelOutput)
     result = self.dataApplier().runPredict(
-        myPredict,
+        self.buildMyPredict(),
         data,
         context
     )
     for one in result:
       yield self.treatSingleOutput(one)
 
+  def evaluate(self, data, table: bool = False, verbose=1):
+    input, target, predictTarget, predictOutput = self.dataApplier().runEvaluate(
+        self.buildMyPredict(),
+        data,
+        table
+    )
+    modelInput = convertToTensors(input)
+    modelTarget = convertToTensors(target)
+    if table:
+      self.printAccuracy(data, predictTarget, predictOutput)
+    return self.model.evaluate(modelInput, modelTarget, verbose=self.getVerbose(verbose))
+
+  def buildMyPredict(self):
+    def myPredict(input):
+      modelInput = convertToTensors(input)
+      modelOutput = self.model.predict(modelInput)
+      return convertFromTensors(self.project, modelOutput)
+    return myPredict
+
   def treatSingleOutput(self, one):
     if self.project.forceSingleValuePerOutput:
       while isinstance(one, list) and len(one) == 1:
         one = one[0]
     return one
-
-  def evaluate(self, data, table: bool = False, verbose=1):
-    input = self.dataApplier().applyFitInput(data)
-    target = self.dataApplier().applyFitTarget(data)
-
-    modelInput = convertToTensors(input)
-    modelTarget = convertToTensors(target)
-
-    if table:
-      modelOutput = self.model.predict(modelInput)
-      preOutput = convertFromTensors(self.project, modelOutput)
-      target = self.dataApplier().applyPredictTarget(target)
-      output = self.dataApplier().applyPredictOutput(preOutput)
-
-      self.printAccuracy(data, target, output)
-
-    return self.model.evaluate(modelInput, modelTarget, verbose=self.getVerbose(verbose))
 
   def getVerbose(self, verbose=None):
     if verbose == None:

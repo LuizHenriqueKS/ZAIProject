@@ -41,3 +41,14 @@ class DefaultDataApplier(DataApplier):
     modelOutput = predictFunc(modelInput)
     output = self.applyPredictOutput(modelOutput)
     return output
+
+  def runEvaluate(self, predictFunc, data, table):
+    input = self.applyFitInput(data)
+    target = self.applyFitTarget(data)
+    predictTarget = None
+    predictOutput = None
+    if table:
+      predictTarget = self.applyPredictTarget(target)
+      modelOutput = predictFunc(input)
+      predictOutput = self.applyPredictOutput(modelOutput)
+    return (input, target, predictTarget, predictOutput)

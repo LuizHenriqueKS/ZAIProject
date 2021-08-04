@@ -18,7 +18,7 @@ samples = [
     "9+1=10"
 ]
 
-project = ai.project.Project(forceSingleValuePerOutput=True)
+project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(.*)\=", joinGroups=True),
@@ -66,6 +66,6 @@ model.fit(samples, epochs=10000, tillAccuracy=1)
 
 print('samples', samples)
 
-model.evaluate(samples, table=True, verbose=2)
+model.evaluate(samples, table=True)
 
 print('Predict', list(model.predict(samples)))

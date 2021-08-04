@@ -11,7 +11,7 @@ for i in range(0, 9):
 
 print(samples)
 
-project = ai.project.Project()
+project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.Lambda(lambda i: i[:2])
