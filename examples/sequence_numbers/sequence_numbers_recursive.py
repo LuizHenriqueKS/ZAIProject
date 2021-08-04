@@ -13,6 +13,7 @@ print(samples)
 
 project = ai.project.Project(
     forceSingleValuePerOutput=True,
+    verbose=2,
     recursive=ai.recursive.Sparse([2])
 )
 
@@ -27,8 +28,7 @@ project.fit.input.add().addAll([
 
 project.fit.output.add().addAll([
     ai.processor.Lambda(lambda i: i[2:]),
-    ai.processor.AutoPadding1D(),
-    ai.processor.Sparse()
+    ai.processor.AutoPadding1D()
 ])
 
 project.predict.baseFit()
@@ -67,6 +67,6 @@ dataset = ai.dataset.TensorDataset(project, samples).prefetch(100).batch(100)
 
 model.fit(dataset, epochs=2000, tillAccuracy=1)
 
-model.evaluate(samples, table=True, verbose=2)
+model.evaluate(samples, table=True)
 
-print('Predict', list(model.predict(samples[0])))
+print('Predict', list(model.predict(samples)))

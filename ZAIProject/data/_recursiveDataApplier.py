@@ -32,7 +32,7 @@ class RecursiveDataApplier(DataApplier):
   def iterApplyPredictOutputOne(self, one):
     return self.parentApplier.iterApplyPredictOutputOne(one)
 
-  def runPredict(self, dataApplier, predictFunc, data, context):
+  def runPredict(self, predictFunc, data, context):
     outputs = []
     for one in data:
       params = ProcessorParams(
@@ -42,7 +42,7 @@ class RecursiveDataApplier(DataApplier):
           context=[[]]
       )
       while self.canContinuePredict(params):
-        input = dataApplier.predict(one, params)
+        input = self.project.predict.input.applyOne(one, params)
         modelOutput = predictFunc([input])[0]
         context = self.recursive.convertOutputToContext(modelOutput)
         self.updateContext(params, context)
@@ -67,7 +67,7 @@ class RecursiveDataApplier(DataApplier):
     input = self.projectApplyInputOne(mode, one, params)
     yield input
     targets = self.applyTargetOne(mode, one)
-    self.maxNumTargets = max(self.maxNumTargets, len(targets) - 1)
+    self.maxNumTargets = max(self.maxNumTargets, len(targets))
     for i in range(0, len(targets) - 1):
       target = targets[i]
       self.updateContext(params, target)

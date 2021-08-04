@@ -12,12 +12,15 @@ class Sparse(Recursive):
     self.reverseSparseProcessor = ReverseSparse()
 
   def convertOutputToContext(self, output):
-    return self.reverseSparseProcessor.apply(output)
+    result = []
+    for ioOutput in output:
+      result.append(self.reverseSparseProcessor.apply(ioOutput))
+    return result
 
   def getOutput(self, params):
     result = []
     for io in range(0, len(params.context)):
-      result[io] = []
+      result.append([])
       for output in params.context[io]:
         for one in output:
           result[io].append(one)
