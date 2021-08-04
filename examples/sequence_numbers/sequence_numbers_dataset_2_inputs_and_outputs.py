@@ -1,3 +1,5 @@
+from tensorflow.python.ops.gen_array_ops import Slice
+from ZAIProject import processor
 import tensorflow as tf
 import ZAIProject as ai
 
@@ -14,20 +16,20 @@ print(samples)
 project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
-    ai.processor.Lambda(lambda i: i[:2])
+    ai.processor.Slice1D(0, 2)
 ])
 
 project.fit.input.add().addAll([
-    ai.processor.Lambda(lambda i: i[2:4])
+    ai.processor.Slice1D(2, 4)
 ])
 
 project.fit.output.add().addAll([
-    ai.processor.Lambda(lambda i: i[4:5]),
+    ai.processor.Slice1D(4, 5),
     ai.processor.Sparse()
 ])
 
 project.fit.output.add().addAll([
-    ai.processor.Lambda(lambda i: i[5:6]),
+    ai.processor.Slice1D(5, 6),
     ai.processor.Sparse()
 ])
 

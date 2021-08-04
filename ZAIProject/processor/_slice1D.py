@@ -1,24 +1,23 @@
 from ..base._processor import Processor
 
 
-class Context(Processor):
+class Slice1D(Processor):
 
-    def __init__(self, contextIndex: int, direction: str = 'right', size: int = None, sharedDataId=None, reverse=None):
-        super().__init__(sharedDataId=sharedDataId, reverse=reverse)
-        self.contextIndex = contextIndex
-        self.size = size
-        self.direction = direction
+  def __init__(self, start, end=None, sharedDataId=None, reverse=None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse)
+    self.start = start
+    self.end = end
 
-    def scale(self, data, project, params):
-        return self.apply(data, project, params)
+  def scale(self, data, project, params):
+    return self.apply(data, project, params)
 
-    def apply(self, data, project, params):
-        output = params.context[self.contextIndex]
-        if self.size != None:
-            if self.direction == 'right':
-                output = output[-self.size:]
-            elif self.direction == 'left':
-                output = output[:self.size]
-            else:
-                raise NotImplementedError()
-        return output
+  def apply(self, data, project, params):
+    if self.end != None:
+      return data[self.start:self.end]
+    else:
+      return data[self.start:]
+
+  def saveData(self, dataRecorder) -> None:
+    super().saveData(self, dataRecorder)
+    dataRecorder.record('start', self.start)
+    dataRecorder.record('end', self.end)

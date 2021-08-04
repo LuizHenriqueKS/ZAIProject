@@ -1,3 +1,5 @@
+from tensorflow.python.ops.gen_array_ops import Slice
+from ZAIProject import processor
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.python.keras import activations
@@ -17,11 +19,11 @@ print(samples)
 project = ai.project.Project()
 
 project.fit.input.add().addAll([
-    ai.processor.Lambda(lambda i: i[:2])
+    ai.processor.Slice1D(0, 2)
 ])
 
 project.fit.output.add().addAll([
-    ai.processor.Lambda(lambda i: i[2:]),
+    ai.processor.Slice1D(2),
     ai.processor.Sparse()
 ])
 

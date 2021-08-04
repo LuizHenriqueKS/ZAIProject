@@ -16,3 +16,4 @@ from ._sparse import Sparse
 from ._reverseSparse import ReverseSparse
 from ._lambda import Lambda
 from ._context import Context
+from ._slice1D import Slice1D
