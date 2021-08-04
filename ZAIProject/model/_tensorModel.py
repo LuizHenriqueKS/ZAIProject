@@ -55,7 +55,7 @@ class TensorModel(Model):
     for one in result:
       yield self.treatSingleOutput(one)
 
-  def evaluate(self, data, table: bool = False, verbose=1):
+  def evaluate(self, data, table: bool = False, verbose=None):
     input, target, predictTarget, predictOutput = self.dataApplier().runEvaluate(
         self.buildMyPredict(),
         data,

@@ -33,15 +33,24 @@ class RecursiveDataApplier(DataApplier):
     return self.parentApplier.iterApplyPredictOutputOne(one)
 
   def runPredict(self, predictFunc, data, context):
+    contextIter = iter(context)
     for one in data:
-      yield self.runPredictOne(predictFunc, one, context, 'predict')
+      preOneContext = next(contextIter)
+      if preOneContext == None:
+        oneContext = None
+      else:
+        preOneContext2 = self.project.predict.context.applyOne(preOneContext)
+        oneContext = list(self.recursive.splitTarget(preOneContext2))
+      yield self.runPredictOne(predictFunc, one, oneContext, 'predict')
 
   def runPredictOne(self, predictFunc, one, context, mode):
+    if context == None:
+      context = []
     params = ProcessorParams(
         mode=mode,
         io="input",
         contextIteration=0,
-        context=[[]]
+        context=context
     )
     while self.canContinuePredict(params):
       if mode == 'predict':
@@ -76,7 +85,10 @@ class RecursiveDataApplier(DataApplier):
     return (input, target, predictTarget, predictOutput)
 
   def canContinuePredict(self, params):
-    return len(params.context[0]) < self.maxNumTargets
+    length = len(params.context)
+    if length > 0:
+      length = len(params.context[0])
+    return length < self.maxNumTargets
 
   def splitIterTarget(self, iterTarget):
     fullTarget = next(iterTarget)

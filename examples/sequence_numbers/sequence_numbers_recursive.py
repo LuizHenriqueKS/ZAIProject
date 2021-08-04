@@ -12,7 +12,7 @@ for i in range(0, 9):
 print(samples)
 
 project = ai.project.Project(
-    forceSingleValuePerOutput=False,
+    forceSingleValuePerOutput=True,
     verbose=2,
     recursive=ai.recursive.Sparse([2])
 )
@@ -69,4 +69,7 @@ model.fit(dataset, epochs=2000, tillAccuracy=1)
 
 model.evaluate(samples, table=True)
 
-print('Predict', list(model.predict(samples)))
+print('Predict one', model.predictOne([1, 2]))
+print('Predict one', model.predictOne([1, 2], [3, 4]))
+print('Predict one', model.predictOne([1, 2], [5, 6]))
+print('Predict one', model.predictOne([1, 2], [6, 7]))

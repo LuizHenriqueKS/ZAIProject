@@ -12,4 +12,4 @@ class Model:
     raise NotImplementedError()
 
   def predictOne(self, data, context=None):
-    return self.predict([data], [context])[0]
+    return next(self.predict([data], [context]))
