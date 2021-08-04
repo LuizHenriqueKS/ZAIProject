@@ -8,3 +8,12 @@ class Recursive:
 
   def getOutput(self, params):
     raise NotImplementedError()
+
+  def canContinuePredict(self, params):
+    raise NotImplementedError()
+
+  def inspectParams(self, params):
+    raise NotImplementedError()
+
+  def saveData(self, dataRecorder):
+    raise NotImplementedError()
