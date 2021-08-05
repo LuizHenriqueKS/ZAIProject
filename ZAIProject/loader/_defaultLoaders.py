@@ -1,6 +1,7 @@
 from ..base._loaders import Loaders
 from ..processor.loader import *
 from ..recursive.loader import *
+from ._modelInfoLoader import ModelInfoLoader
 
 
 class DefaultLoaders(Loaders):
@@ -15,3 +16,4 @@ class DefaultLoaders(Loaders):
     self.addLoader(SparseProcessorLoader())
     self.addLoader(CustomRecursiveLoader())
     self.addLoader(SparseRecursiveLoader())
+    self.addLoader(ModelInfoLoader())

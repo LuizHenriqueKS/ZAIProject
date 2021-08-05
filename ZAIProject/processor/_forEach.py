@@ -46,5 +46,5 @@ class ForEach(Processor):
     super().saveData(dataRecorder)
     for i in range(0, len(self.processores)):
       processor = self.processores[i]
-      dataRecorderChild = dataRecorder.getChild(f'processor{i}')
+      dataRecorderChild = dataRecorder.getChild(f'processor{i:05d}')
       processor.saveData(dataRecorderChild)

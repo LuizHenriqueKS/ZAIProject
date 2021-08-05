@@ -3,7 +3,7 @@ from typing import Literal
 
 class Loader:
 
-  def type() -> Literal['processor', 'recursive']:
+  def type() -> Literal['processor', 'recursive', 'modelInfo']:
     raise NotImplementedError()
 
   def canLoad(self, loaders, project, data) -> bool:

@@ -19,3 +19,6 @@ from ._context import Context
 from ._slice1D import Slice1D
 from ._normalize import Normalize
 from ._reverseNormalize import ReverseNormalize
+from ._audioFileToSamples import AudioFileToSamples
+from ._flatten import Flatten
+from ._reshape import Reshape

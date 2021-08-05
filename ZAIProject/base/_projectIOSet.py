@@ -10,7 +10,7 @@ class ProjectIOSet:
 
   def saveData(self, dataRecorder):
     for i in range(0, len(self.ios)):
-      self.ios[i].saveData(dataRecorder.getChild(f'io{i}'))
+      self.ios[i].saveData(dataRecorder.getChild(f'io{i:05d}'))
 
   def add(self, io: ProjectIO = None) -> ProjectIO:
     if io == None:

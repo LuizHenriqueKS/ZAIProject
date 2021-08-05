@@ -37,6 +37,7 @@ class Project:
     dataRecorder.record('sharedData', self.sharedData.data)
     dataRecorder.record(
         'datetime', datetime.now().strftime('%d/%m/%Y %H:%M:%S.%f'))
+    self.modelInfo.saveData(dataRecorder.getChild('modelInfo'))
     self.fit.saveData(dataRecorder.getChild('fit'))
     self.predict.saveData(dataRecorder.getChild('predict'))
     if self.recursive != None:
@@ -59,6 +60,10 @@ class Project:
   def updateIOInfo(self, index, ioInfo, data):
     if len(ioInfo) <= index:
       ioInfo.append(IOInfo())
+    '''if type(data[index], list):
+      raise ValueError(
+          'The last processor should convert the data to a list of numbers'
+      )'''
     if len(data[index]) > 0:
       ioInfo[index].shape = getMaxShape(
           getShape(data[index]),
