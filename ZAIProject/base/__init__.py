@@ -6,3 +6,5 @@ from ._projectIOSet import ProjectIOSet
 from ._processor import Processor
 from ._sharedData import SharedData
 from ._recursive import Recursive
+from ._loaders import Loaders
+from ._loader import Loader

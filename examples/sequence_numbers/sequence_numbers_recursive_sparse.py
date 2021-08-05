@@ -1,7 +1,7 @@
-from tensorflow.python.ops.gen_array_ops import Slice
-from ZAIProject import processor
 import tensorflow as tf
 import ZAIProject as ai
+import tempfile
+
 
 samples = []
 
@@ -69,9 +69,16 @@ dataset = ai.dataset.TensorDataset(project, samples).prefetch(100).batch(100)
 
 model.fit(dataset, epochs=2000, tillAccuracy=1)
 
-model.evaluate(samples, table=True)
+projectFile = tempfile.TemporaryFile(suffix='.json').name
+print('projectFile', projectFile)
+ai.project.io.writeFile(project, projectFile)
 
-print('Predict one', model.predictOne([1, 2]))
-print('Predict one', model.predictOne([1, 2], [3, 4]))
-print('Predict one', model.predictOne([1, 2], [5, 6]))
-print('Predict one', model.predictOne([1, 2], [6, 7]))
+project2 = ai.project.io.readFile(projectFile)
+
+model2 = ai.model.TensorModel(project2, tsModel)
+model2.evaluate(samples, table=True)
+
+print('Predict one', model2.predictOne([1, 2]))
+print('Predict one', model2.predictOne([1, 2], [3, 4]))
+print('Predict one', model2.predictOne([1, 2], [5, 6]))
+print('Predict one', model2.predictOne([1, 2], [6, 7]))

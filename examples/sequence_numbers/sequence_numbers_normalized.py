@@ -21,16 +21,25 @@ project = ai.project.Project(
 
 project.fit.input.add().addAll([
     ai.processor.Slice1D(0, 2),
+    ai.processor.ForEach([
+        ai.processor.Normalize(name='i1')
+    ])
 ])
 
 project.fit.input.add().addAll([
     ai.processor.Context(0),
-    ai.processor.AutoPadding1D()
+    ai.processor.AutoPadding1D(),
+    ai.processor.ForEach([
+        ai.processor.Normalize(name='i2')
+    ])
 ])
 
 project.fit.output.add().addAll([
     ai.processor.Slice1D(2),
-    ai.processor.AutoPadding1D()
+    ai.processor.AutoPadding1D(),
+    ai.processor.ForEach([
+        ai.processor.Normalize(name='o1')
+    ])
 ])
 
 project.predict.baseFit()
@@ -54,10 +63,8 @@ inputDim = 11
 outputDim = 2
 
 output = tf.keras.layers.Concatenate()([input1, input2])
-output = tf.keras.layers.Embedding(inputDim, 10)(output)
-output = tf.keras.layers.Flatten()(output)
-output = tf.keras.layers.Dense(20)(output)
-output = tf.keras.layers.Dense(outputDim)(output)
+output = tf.keras.layers.Dense(20, activation='relu')(output)
+output = tf.keras.layers.Dense(outputDim, activation='sigmoid')(output)
 tsModel = tf.keras.Model([input1, input2], output)
 tsModel.compile(
     'adam',

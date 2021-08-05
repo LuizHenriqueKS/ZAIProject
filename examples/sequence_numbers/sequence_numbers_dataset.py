@@ -1,11 +1,5 @@
-from tensorflow.python.ops.gen_array_ops import Slice
-from ZAIProject import processor
 import tensorflow as tf
-from tensorflow.keras import layers
-from tensorflow.python.keras import activations
-from tensorflow.python.keras.layers.core import Flatten
 import ZAIProject as ai
-
 samples = []
 
 for i in range(0, 9):

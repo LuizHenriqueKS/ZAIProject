@@ -9,6 +9,7 @@ from ..base._ioInfo import IOInfo
 from ._sharedData import SharedData
 from ..data._defaultDataApplier import DefaultDataApplier
 from ..data._recursiveDataApplier import RecursiveDataApplier
+from datetime import datetime
 
 
 class Project:
@@ -21,12 +22,25 @@ class Project:
     self.forceSingleValuePerOutput = forceSingleValuePerOutput
     self._dataApplier = DefaultDataApplier(self)
     self.verbose = verbose
+    self.recursive = recursive
     if recursive != None:
       self._dataApplier = RecursiveDataApplier(
           self,
           self._dataApplier,
           recursive
       )
+
+  def saveData(self, dataRecorder):
+    dataRecorder.record('verbose', self.verbose)
+    dataRecorder.record('forceSingleValuePerOutput',
+                        self.forceSingleValuePerOutput)
+    dataRecorder.record('sharedData', self.sharedData.data)
+    dataRecorder.record(
+        'datetime', datetime.now().strftime('%d/%m/%Y %H:%M:%S.%f'))
+    self.fit.saveData(dataRecorder.getChild('fit'))
+    self.predict.saveData(dataRecorder.getChild('predict'))
+    if self.recursive != None:
+      self.recursive.saveData(dataRecorder.getChild('recursive'))
 
   def scale(self, data, verbose: bool = False):
     maxProgress = len(data)

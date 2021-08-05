@@ -1,9 +1,10 @@
 from ..base._processor import Processor
+from typing import Literal
 
 
 class AutoPadding1D(Processor):
 
-  def __init__(self, direction: str = 'right', value=None, sharedDataId=None, reverse=None):
+  def __init__(self, direction: Literal['left', 'right'] = 'right', value=None, sharedDataId=None, reverse=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse)
     self.direction = direction
     self.value = value

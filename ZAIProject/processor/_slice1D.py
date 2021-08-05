@@ -18,6 +18,6 @@ class Slice1D(Processor):
       return data[self.start:]
 
   def saveData(self, dataRecorder) -> None:
-    super().saveData(self, dataRecorder)
+    super().saveData(dataRecorder)
     dataRecorder.record('start', self.start)
     dataRecorder.record('end', self.end)

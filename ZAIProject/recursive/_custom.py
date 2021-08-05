@@ -5,11 +5,17 @@ from ..processor._reverseSparse import ReverseSparse
 
 class Custom(Recursive):
 
-  def __init__(self, processor, contextShape: List[int]):
+  def __init__(self, processor, contextShape: List[int], maxLengthContext=0):
     super().__init__()
     self.contextShape = contextShape
     self.processor = processor
-    self.maxLengthContext = 0
+    self.maxLengthContext = maxLengthContext
+
+  def saveData(self, dataRecorder):
+    dataRecorder.record('contextShape', self.contextShape)
+    dataRecorder.record('maxLengthContext', self.maxLengthContext)
+    dataRecorder.record('type', type(self).__name__)
+    self.processor.saveData(dataRecorder.getChild("processor"))
 
   def canContinuePredict(self, params):
     length = self.getContextLength(params)
