@@ -51,6 +51,8 @@ class AutoPadding1D(Processor):
 
   def getValue(self, project):
     try:
+      if self.value != None:
+        return self.value
       return self.getSharedData(project)['value']
     except KeyError:
       return None

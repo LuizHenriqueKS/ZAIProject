@@ -26,3 +26,5 @@ class DefaultLoaders(Loaders):
     self.addLoader(AudioFileToSamplesProcessorLoader())
     self.addLoader(FlattenProcessorLoader())
     self.addLoader(ContextLengthProcessorLoader())
+    self.addLoader(BinaryToIntProcessorLoader())
+    self.addLoader(IntToBinaryProcessorLoader())

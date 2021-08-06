@@ -1,3 +1,4 @@
+from logging import exception
 from ..base._processor import Processor
 from typing import Literal
 
@@ -29,6 +30,8 @@ class Eraser1D(Processor):
       return data
 
   def getValue(self, project):
+    if self.value != None:
+      return self.value
     return self.getSharedData(project)['value']
 
   def reverse(self):

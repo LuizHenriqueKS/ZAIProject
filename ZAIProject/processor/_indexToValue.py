@@ -17,8 +17,11 @@ class IndexToValue(Processor):
       requireNumberArray(data)
       data = getBestIndex(data)
     requireInt(data)
-    index = dict[data]
-    return index
+    try:
+      value = dict[data]
+    except:
+      value = dict[0]
+    return value
 
   def reverse(self):
     if self.reverseProcessor != None:

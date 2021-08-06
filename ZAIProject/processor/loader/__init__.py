@@ -13,3 +13,5 @@ from ._samplesToAudioFileProcessorLoader import SamplesToAudioFileProcessorLoade
 from ._flattenProcessorLoader import FlattenProcessorLoader
 from ._contextLengthProcessorLoader import ContextLengthProcessorLoader
 from ._audioFileToSamplesProcessorLoader import AudioFileToSamplesProcessorLoader
+from ._binaryToIntProcessorLoader import BinaryToIntProcessorLoader
+from ._intToBinaryProcessorLoader import IntToBinaryProcessorLoader

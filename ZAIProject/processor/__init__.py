@@ -24,3 +24,5 @@ from ._audioFileToSamples import AudioFileToSamples
 from ._flatten import Flatten
 from ._reshape import Reshape
 from ._samplesToAudioFile import SamplesToAudioFile
+from ._binaryToInt import BinaryToInt
+from ._intToBinary import IntToBinary
