@@ -14,12 +14,12 @@ from datetime import datetime
 
 class Project:
 
-  def __init__(self, verbose=1, forceSingleValuePerOutput=False, recursive=None):
+  def __init__(self, verbose=1, forceSingleOutput=False, recursive=None):
     self.fit = ProjectFit(self)
     self.predict = ProjectPredict(self)
     self.modelInfo = ModelInfo()
     self.sharedData = SharedData()
-    self.forceSingleValuePerOutput = forceSingleValuePerOutput
+    self.forceSingleOutput = forceSingleOutput
     self._dataApplier = DefaultDataApplier(self)
     self.verbose = verbose
     self.recursive = recursive
@@ -32,8 +32,8 @@ class Project:
 
   def saveData(self, dataRecorder):
     dataRecorder.record('verbose', self.verbose)
-    dataRecorder.record('forceSingleValuePerOutput',
-                        self.forceSingleValuePerOutput)
+    dataRecorder.record('forceSingleOutput',
+                        self.forceSingleOutput)
     dataRecorder.record('sharedData', self.sharedData.data)
     dataRecorder.record(
         'datetime', datetime.now().strftime('%d/%m/%Y %H:%M:%S.%f'))

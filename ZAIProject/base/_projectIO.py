@@ -17,6 +17,15 @@ class ProjectIO:
     self.processores.append(processor)
     return self
 
+  def clear(self):
+    self.processores = []
+
+  def removeByIndex(self, index: int):
+    self.processores.pop(index)
+
+  def removeLast(self):
+    self.processores.pop()
+
   def insert(self, index: int, processor: Processor):
     self.processores.insert(index, processor)
     return self

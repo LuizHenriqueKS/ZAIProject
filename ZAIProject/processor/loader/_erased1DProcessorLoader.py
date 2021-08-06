@@ -8,7 +8,7 @@ class Erased1DProcessorLoader(Loader):
     return 'processor'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return data['type'] == Eraser1D.__name__
+    return self.tryGetData(data, 'type') == Eraser1D.__name__
 
   def load(self, loaders, project, data):
     return Eraser1D(

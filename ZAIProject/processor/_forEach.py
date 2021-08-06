@@ -5,8 +5,8 @@ from ..validation._requireArray import requireArray
 
 
 class ForEach(Processor):
-  def __init__(self, processores, reverse=None):
-    super().__init__(reverse=reverse)
+  def __init__(self, processores, sharedDataId=None, reverse=None, name=None):
+    super().__init__(reverse=reverse, sharedDataId=sharedDataId, name=name)
     if isinstance(processores, Processor):
       self.processores = [processores]
     else:

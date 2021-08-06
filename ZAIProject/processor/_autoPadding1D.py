@@ -12,14 +12,19 @@ class AutoPadding1D(Processor):
   def scale(self, data, project, params=None):
     self.updateLength(project, len(data))
     self.updateValue(project, data)
-    return data
+    return self.apply(data, project)
 
   def apply(self, data, project, params=None):
     length = self.getLength(project)
     value = self.getValue(project)
     result = [*data]
     while length > len(result):
-      result.append(value)
+      if self.direction == 'right':
+        result.append(value)
+      elif self.direction == 'left':
+        result.insert(0, value)
+      else:
+        raise ValueError(self.direction)
     return result
 
   def reverse(self):

@@ -8,10 +8,12 @@ class SparseRecursiveLoader(Loader):
     return 'recursive'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return data['type'] == Sparse.__name__
+    return self.tryGetData(data, 'type') == Sparse.__name__
 
   def load(self, loaders, project, data):
-    return Sparse(
+    result = Sparse(
         data['contextShape'],
         data['maxLengthContext']
     )
+    result.emptyValue = data['emptyValue']
+    return result

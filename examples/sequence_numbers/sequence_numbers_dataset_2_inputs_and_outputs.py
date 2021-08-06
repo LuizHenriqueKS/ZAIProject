@@ -13,7 +13,7 @@ for i in range(0, 9):
 
 print(samples)
 
-project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
+project = ai.project.Project(forceSingleOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.Slice1D(0, 2)

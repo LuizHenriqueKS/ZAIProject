@@ -16,9 +16,11 @@ from ._sparse import Sparse
 from ._reverseSparse import ReverseSparse
 from ._lambda import Lambda
 from ._context import Context
+from ._contextLength import ContextLength
 from ._slice1D import Slice1D
 from ._normalize import Normalize
 from ._reverseNormalize import ReverseNormalize
 from ._audioFileToSamples import AudioFileToSamples
 from ._flatten import Flatten
 from ._reshape import Reshape
+from ._samplesToAudioFile import SamplesToAudioFile

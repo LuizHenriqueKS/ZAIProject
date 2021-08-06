@@ -75,7 +75,7 @@ class TensorModel(Model):
     return myPredict
 
   def treatSingleOutput(self, one):
-    if self.project.forceSingleValuePerOutput:
+    if self.project.forceSingleOutput:
       while isinstance(one, list) and len(one) == 1:
         one = one[0]
     return one

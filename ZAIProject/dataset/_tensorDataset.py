@@ -13,7 +13,7 @@ def readSamples(project, samples, singleOutputs):
         input = tuple(input)
       if len(project.modelInfo.output) == 1:
         target = target[0]
-        if singleOutputs != None and singleOutputs[0]:
+        if singleOutputs != None and (singleOutputs == True or singleOutputs[0]):
           target = target[0]
       else:
         if singleOutputs != None:
@@ -26,7 +26,7 @@ def readSamples(project, samples, singleOutputs):
 
 
 def TensorDataset(project, samples, singleOutputs=None):
-  print(next(iter(readSamples(project, samples, singleOutputs)())))
+  #print(next(iter(readSamples(project, samples, singleOutputs)())))
   dataset = tf.data.Dataset.from_generator(
       readSamples(project, samples, singleOutputs),
       buildOutputShapes(project)

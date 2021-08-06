@@ -10,11 +10,13 @@ class Custom(Recursive):
     self.contextShape = contextShape
     self.processor = processor
     self.maxLengthContext = maxLengthContext
+    self.emptyValue = 0
 
   def saveData(self, dataRecorder):
     dataRecorder.record('contextShape', self.contextShape)
     dataRecorder.record('maxLengthContext', self.maxLengthContext)
     dataRecorder.record('type', type(self).__name__)
+    dataRecorder.record('emptyValue', self.emptyValue)
     self.processor.saveData(dataRecorder.getChild("processor"))
 
   def canContinuePredict(self, params):
@@ -46,7 +48,7 @@ class Custom(Recursive):
           result[io].append(one)
     return result
 
-  def splitTarget(self, target):
+  def splitTarget(self, mode, target):
     hasData = True
     indexes = [0 for _ in range(0, len(self.contextShape))]
     while hasData:
@@ -54,15 +56,26 @@ class Custom(Recursive):
       loopResult = []
       for io in range(0, len(self.contextShape)):
         ioTarget = target[io]
-        splitedTarget = self.splitIOTarget(io, ioTarget, indexes)
+        splitedTarget = self.splitIOTarget(mode, io, ioTarget, indexes)
         hasData |= len(ioTarget) > indexes[io]
         loopResult.append(splitedTarget)
       yield loopResult
 
-  def splitIOTarget(self, io: int, ioTarget, indexes: List[int]):
+  def splitIOTarget(self, mode, io: int, ioTarget, indexes: List[int]):
     index = indexes[io]
     result = []
+    length = len(ioTarget)
     for i in range(0, self.contextShape[io]):
-      result.append(ioTarget[index + i])
+      if i + index >= length:
+        result.append(self.emptyValue)
+      else:
+        target = ioTarget[index + i]
+        result.append(target)
+        if mode == 'scale':
+          self.updateEmptyValue(target)
     indexes[io] = index + len(result)
     return result
+
+  def updateEmptyValue(self, target):
+    if self.emptyValue <= target:
+      self.emptyValue = target + 1

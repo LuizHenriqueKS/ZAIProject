@@ -14,7 +14,7 @@ for i in range(0, 9):
 print(samples)
 
 project = ai.project.Project(
-    forceSingleValuePerOutput=True,
+    forceSingleOutput=True,
     verbose=2,
     recursive=ai.recursive.Raw([2])
 )

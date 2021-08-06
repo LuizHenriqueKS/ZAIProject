@@ -9,7 +9,7 @@ class ModelInfoLoader(Loader):
     return 'modelInfo'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return data['type'] == ModelInfo.__name__
+    return self.tryGetData(data, 'type') == ModelInfo.__name__
 
   def load(self, loaders, project, data):
     modelInfo = ModelInfo()

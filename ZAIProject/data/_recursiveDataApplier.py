@@ -17,10 +17,10 @@ class RecursiveDataApplier(DataApplier):
     return self.iterApplyInputOne(data, mode="fit")
 
   def iterScaleFitTargetOne(self, one):
-    return self.splitIterTarget(self.parentApplier.iterScaleFitTargetOne(one))
+    return self.splitIterTarget('scale', self.parentApplier.iterScaleFitTargetOne(one))
 
   def iterApplyFitTargetOne(self, one):
-    return self.splitIterTarget(self.parentApplier.iterApplyFitTargetOne(one))
+    return self.splitIterTarget('fit', self.parentApplier.iterApplyFitTargetOne(one))
 
   def iterApplyPredictInputOne(self, one):
     return self.parentApplier.iterApplyPredictInputOne(one)
@@ -39,7 +39,12 @@ class RecursiveDataApplier(DataApplier):
         oneContext = None
       else:
         preOneContext2 = self.project.predict.context.applyOne(preOneContext)
-        oneContext = list(self.recursive.splitTarget(preOneContext2))
+        oneContext = list(
+            self.recursive.splitTarget(
+                'predict',
+                preOneContext2
+            )
+        )
       yield self.runPredictOne(predictFunc, one, oneContext, 'predict')
 
   def runPredictOne(self, predictFunc, one, context, mode):
@@ -83,9 +88,9 @@ class RecursiveDataApplier(DataApplier):
         predictOutput.append(oneOutput)
     return (input, target, predictTarget, predictOutput)
 
-  def splitIterTarget(self, iterTarget):
+  def splitIterTarget(self, mode, iterTarget):
     fullTarget = next(iterTarget)
-    return self.recursive.splitTarget(fullTarget)
+    return self.recursive.splitTarget(mode, fullTarget)
 
   def iterApplyInputOne(self, one, mode):
     params = ProcessorParams(

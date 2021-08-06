@@ -14,7 +14,7 @@ samples = [
     "9 1=10,8"
 ]
 
-project = ai.project.Project(forceSingleValuePerOutput=True, verbose=2)
+project = ai.project.Project(forceSingleOutput=True, verbose=2)
 
 project.fit.input.add().addAll([
     ai.processor.RegExp(r"(\d+) (\d+)"),

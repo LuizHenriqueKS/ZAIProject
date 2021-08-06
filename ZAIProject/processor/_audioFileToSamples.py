@@ -1,6 +1,5 @@
 from random import sample
 
-from numpy import lib
 from ..base._processor import Processor
 from ..validation import requireStr
 import librosa
@@ -8,8 +7,8 @@ import librosa
 
 class AudioFileToSamples(Processor):
 
-  def __init__(self, sampleRate=None, mono=False, sharedDataId=None, reverse=None):
-    super().__init__(sharedDataId=sharedDataId, reverse=reverse)
+  def __init__(self, sampleRate=None, mono=False, sharedDataId=None, reverse=None, name=None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.sampleRate = sampleRate
     self.mono = mono
 
@@ -25,3 +24,9 @@ class AudioFileToSamples(Processor):
     super().saveData(dataRecorder)
     dataRecorder.record('sampleRate', self.sampleRate)
     dataRecorder.record('mono', self.mono)
+
+  def reverse(self):
+    if self.reverseProcessor != None:
+      return self.reverseProcessor
+    from ._samplesToAudioFile import SamplesToAudioFile
+    return SamplesToAudioFile(self.sampleRate, sharedDataId=self.sharedDataId)

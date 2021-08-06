@@ -1,6 +1,6 @@
 class Recursive:
 
-  def splitTarget(self, target):
+  def splitTarget(self, mode, target):
     raise NotImplementedError()
 
   def convertOutputToContext(self, output):

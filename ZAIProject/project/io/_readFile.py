@@ -13,7 +13,7 @@ def readFile(file: str, loaders: Loaders = None) -> Project:
   project = Project()
   data = readData(file)
   project.verbose = data['verbose']
-  project.forceSingleValuePerOutput = data['forceSingleValuePerOutput']
+  project.forceSingleOutput = data['forceSingleOutput']
   project.sharedData.data = data['sharedData']
   readIOSet(loaders, project, project.fit.input, data, ['fit', 'input'])
   readIOSet(loaders, project, project.fit.output, data, ['fit', 'output'])
