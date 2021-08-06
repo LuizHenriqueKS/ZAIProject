@@ -12,8 +12,11 @@ class Erased1DProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return Eraser1D(
-        data['direction'],
-        data['value'],
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor')
+        direction=data['direction'],
+        value=data['value'],
+        sharedDataID=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name')
     )

@@ -5,3 +5,4 @@ from ._getMinValue import getMinValue
 from ._getMaxValue import getMaxValue
 from ._getBestIndex import getBestIndex
 from ._applyRuleOf3 import applyRuleOf3
+from ._flatten import flatten

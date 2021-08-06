@@ -12,8 +12,10 @@ class ContextLengthProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return ContextLength(
-        data['contextIndex'],
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor'),
-        self.tryGetData(data, 'name')
+        contextIndex=data['contextIndex'],
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name')
     )

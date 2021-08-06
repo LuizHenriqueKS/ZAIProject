@@ -2,8 +2,9 @@ from ..base._processor import Processor
 
 
 class ValueToIndex(Processor):
-  def __init__(self, sharedDataId=None, reverse=None, name=None):
+  def __init__(self, unknownValue='unknown', sharedDataId=None, reverse=None, name=None):
     super().__init__(reverse=reverse, sharedDataId=sharedDataId, name=name)
+    self.unknownValue = unknownValue
 
   def scale(self, data, project, params=None):
     dict = self.getDict(project)
@@ -29,11 +30,12 @@ class ValueToIndex(Processor):
   def getDict(self, project):
     sharedData = self.getSharedData(project)
     if not 'dict' in sharedData:
-      dict = ['<unkown>']
+      dict = [self.unknownValue]
       sharedData['dict'] = dict
     return sharedData['dict']
 
   def setDict(self, project, dict):
     sharedData = self.getSharedData(project)
     sharedData['dict'] = dict
+    sharedData['unknownValue'] = self.unknownValue
     return self

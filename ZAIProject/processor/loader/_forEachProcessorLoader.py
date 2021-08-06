@@ -16,8 +16,10 @@ class ForEachProcessorLoader(Loader):
       if key.startswith('processor'):
         processores.append(loaders.load('processor', project, data[key]))
     return ForEach(
-        processores,
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor'),
-        self.tryGetData(data, 'name'),
+        processores=processores,
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name'),
     )

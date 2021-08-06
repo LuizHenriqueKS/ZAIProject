@@ -12,8 +12,10 @@ class SplitStrProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return SplitStr(
-        data['separator'],
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor'),
-        self.tryGetData(data, 'name'),
+        separator=data['separator'],
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name'),
     )

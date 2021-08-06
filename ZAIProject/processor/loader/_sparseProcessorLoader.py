@@ -12,6 +12,8 @@ class SparseProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return Sparse(
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor')
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        )
     )

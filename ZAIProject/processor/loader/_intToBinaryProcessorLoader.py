@@ -12,8 +12,10 @@ class IntToBinaryProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return IntToBinary(
-        self.tryGetData(data, 'binaryLength'),
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor'),
-        self.tryGetData(data, 'name'),
+        binaryLength=self.tryGetData(data, 'binaryLength'),
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name'),
     )

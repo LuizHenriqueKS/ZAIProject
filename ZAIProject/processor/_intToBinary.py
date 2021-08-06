@@ -28,7 +28,7 @@ class IntToBinary(Processor):
     return BinaryToInt(sharedDataId=self.sharedDataId)
 
   def saveData(self, dataRecorder) -> None:
-    super().saveData(self, dataRecorder)
+    super().saveData(dataRecorder)
     dataRecorder.record('binaryLength', self.binaryLength)
 
   def getBinaryLength(self, project):

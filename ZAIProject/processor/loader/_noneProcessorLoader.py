@@ -12,6 +12,9 @@ class NoneProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return NoneProcessor(
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor')
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name')
     )

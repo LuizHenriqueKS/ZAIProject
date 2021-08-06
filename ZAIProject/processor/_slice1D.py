@@ -3,8 +3,8 @@ from ..base._processor import Processor
 
 class Slice1D(Processor):
 
-  def __init__(self, start, end=None, sharedDataId=None, reverse=None):
-    super().__init__(sharedDataId=sharedDataId, reverse=reverse)
+  def __init__(self, start, end=None, sharedDataId=None, reverse=None, name=None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.start = start
     self.end = end
 

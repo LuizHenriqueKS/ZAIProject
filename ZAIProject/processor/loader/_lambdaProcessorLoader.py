@@ -14,8 +14,10 @@ class LambdaProcessorLoader(Loader):
     lambdaExpression = data['lambdaFunc']
     def lambdaFunc(x): return x
     return Lambda(
-        lambdaFunc,
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor'),
-        self.tryGetData(data, 'name'),
+        lambdaFunc=lambdaFunc,
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name'),
     )

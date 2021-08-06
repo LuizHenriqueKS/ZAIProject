@@ -12,8 +12,11 @@ class ContextProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return Context(
-        data['contextIndex'],
-        data['returnSequences'],
-        data['sharedDataId'],
-        loaders.tryLoadChild('processor', project, data, 'reverseProcessor')
+        contextIndex=data['contextIndex'],
+        returnSequences=data['returnSequences'],
+        sharedDataId=data['sharedDataId'],
+        reverse=loaders.tryLoadChild(
+            'processor', project, data, 'reverseProcessor'
+        ),
+        name=self.tryGetData(data, 'name')
     )
