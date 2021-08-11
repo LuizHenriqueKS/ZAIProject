@@ -15,3 +15,6 @@ from ._contextLengthProcessorLoader import ContextLengthProcessorLoader
 from ._audioFileToSamplesProcessorLoader import AudioFileToSamplesProcessorLoader
 from ._binaryToIntProcessorLoader import BinaryToIntProcessorLoader
 from ._intToBinaryProcessorLoader import IntToBinaryProcessorLoader
+from ._reverseNormalizeProcessorLoader import ReverseNormalizeLoader
+from ._reverseSparseProcessorLoader import ReverseSparseProcessorLoader
+from ._ruleOf3ProcessorLoader import RuleOf3DProcessorLoader

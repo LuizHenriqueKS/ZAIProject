@@ -1,20 +1,17 @@
 from ZAIProject.base import Loader
-from .._autoPadding1D import AutoPadding1D
+from .._reverseSparse import ReverseSparse
 
 
-class AutoPadding1DProcessorLoader(Loader):
+class ReverseSparseProcessorLoader(Loader):
 
   def type(self):
     return 'processor'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return self.tryGetData(data, 'type') == AutoPadding1D.__name__
+    return self.tryGetData(data, 'type') == ReverseSparse.__name__
 
   def load(self, loaders, project, data):
-    return AutoPadding1D(
-        direction=data['direction'],
-        value=data['value'],
-        length=self.tryGetData(data, 'length'),
+    return ReverseSparse(
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'

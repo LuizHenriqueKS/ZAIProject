@@ -28,3 +28,6 @@ class DefaultLoaders(Loaders):
     self.addLoader(ContextLengthProcessorLoader())
     self.addLoader(BinaryToIntProcessorLoader())
     self.addLoader(IntToBinaryProcessorLoader())
+    self.addLoader(ReverseNormalizeLoader())
+    self.addLoader(ReverseSparseProcessorLoader())
+    self.addLoader(RuleOf3DProcessorLoader())

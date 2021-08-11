@@ -4,8 +4,8 @@ from ..utility._applyRuleOf3 import applyRuleOf3
 
 class ReverseNormalize(Processor):
 
-  def __init__(self, minOutput=0, maxOutput=1, sharedDataId=None, reverse=None):
-    super().__init__(sharedDataId=sharedDataId, reverse=reverse)
+  def __init__(self, minOutput=0, maxOutput=1, sharedDataId=None, reverse=None, name=None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.minOutput = minOutput
     self.maxOutput = maxOutput
 

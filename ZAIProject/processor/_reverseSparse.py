@@ -6,6 +6,9 @@ from ..utility._getBestIndex import getBestIndex
 
 class ReverseSparse(Processor):
 
+  def __init__(self, sharedDataId=None, reverse=None, name: str = None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
+
   def scale(self, data, project, params):
     return self.apply(data, project, params)
 

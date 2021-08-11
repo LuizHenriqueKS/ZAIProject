@@ -9,9 +9,10 @@ import tempfile
 
 class SamplesToAudioFile(Processor):
 
-  def __init__(self, sampleRate=None, sharedDataId=None, reverse=None, name=None):
+  def __init__(self, sampleRate=None, dtype='float32', sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.sampleRate = sampleRate
+    self.dtype = dtype
 
   def scale(self, data, project=None, params=None):
     return self.apply(data, project, params)
@@ -25,8 +26,9 @@ class SamplesToAudioFile(Processor):
     if self.reverseProcessor != None:
       return self.reverseProcessor
     from ._audioFileToSamples import AudioFileToSamples
-    return AudioFileToSamples(self.sampleRate, sharedDataId=self.sharedDataId)
+    return AudioFileToSamples(sampleRate=self.sampleRate, dtype=self.dtype, sharedDataId=self.sharedDataId)
 
   def saveData(self, dataRecorder) -> None:
     super().saveData(dataRecorder)
     dataRecorder.record('sampleRate', self.sampleRate)
+    dataRecorder.record('dtype', self.dtype)

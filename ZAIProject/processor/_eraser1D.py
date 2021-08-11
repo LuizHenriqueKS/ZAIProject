@@ -5,8 +5,8 @@ from typing import Literal
 
 class Eraser1D(Processor):
 
-  def __init__(self, direction: Literal['left', 'right'], value=None, sharedDataId=None, reverse=None):
-    super().__init__(sharedDataId=sharedDataId, reverse=reverse)
+  def __init__(self, direction: Literal['left', 'right'], value=None, sharedDataId=None, reverse=None, name=None):
+    super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.direction = direction
     self.value = value
 

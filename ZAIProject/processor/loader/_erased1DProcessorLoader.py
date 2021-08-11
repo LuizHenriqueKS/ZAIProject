@@ -14,7 +14,7 @@ class Erased1DProcessorLoader(Loader):
     return Eraser1D(
         direction=data['direction'],
         value=data['value'],
-        sharedDataID=data['sharedDataId'],
+        sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'
         ),

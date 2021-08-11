@@ -1,4 +1,5 @@
 import tensorflow as tf
+import random
 
 
 def readSamples(project, samples, singleOutputs):
@@ -25,13 +26,38 @@ def readSamples(project, samples, singleOutputs):
   return reader
 
 
-def TensorDataset(project, samples, singleOutputs=None):
+def TensorDataset(project, samples, singleOutputs=None, split: float = None):
   #print(next(iter(readSamples(project, samples, singleOutputs)())))
-  dataset = tf.data.Dataset.from_generator(
-      readSamples(project, samples, singleOutputs),
-      buildOutputShapes(project)
-  )
-  return dataset
+  if split != None:
+    firstSamples, secondSamples = splitSamples(samples, split)
+    first = tf.data.Dataset.from_generator(
+        readSamples(project, firstSamples, singleOutputs),
+        buildOutputShapes(project)
+    )
+    second = tf.data.Dataset.from_generator(
+        readSamples(project, secondSamples, singleOutputs),
+        buildOutputShapes(project)
+    )
+    return first, second
+  else:
+    dataset = tf.data.Dataset.from_generator(
+        readSamples(project, samples, singleOutputs),
+        buildOutputShapes(project)
+    )
+    return dataset
+
+
+def splitSamples(samples, split: float):
+  firstLength = round(len(samples) * split)
+  secondLength = len(samples) - firstLength
+  first = [i for i in samples]
+  second = []
+  while len(second) < secondLength:
+    index = random.randrange(len(first))
+    item = first[index]
+    second.append(item)
+    first.pop(index)
+  return first, second
 
 
 def buildOutputShapes(project):

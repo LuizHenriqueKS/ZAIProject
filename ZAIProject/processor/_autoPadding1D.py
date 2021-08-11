@@ -4,10 +4,11 @@ from typing import Literal
 
 class AutoPadding1D(Processor):
 
-  def __init__(self, direction: Literal['left', 'right'] = 'right', value=None, sharedDataId=None, reverse=None, name=None):
+  def __init__(self, direction: Literal['left', 'right'] = 'right', length=None, value=None, sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.direction = direction
     self.value = value
+    self.length = length
 
   def scale(self, data, project, params=None):
     self.updateLength(project, len(data))
@@ -37,6 +38,7 @@ class AutoPadding1D(Processor):
     super().saveData(dataRecorder)
     dataRecorder.record('direction', self.direction)
     dataRecorder.record('value', self.value)
+    dataRecorder.record('length', self.length)
 
   def updateValue(self, project, data):
     if len(data) > 0:
@@ -66,6 +68,8 @@ class AutoPadding1D(Processor):
     self.getSharedData(project)['length'] = length
 
   def getLength(self, project):
+    if self.length != None:
+      return self.length
     try:
       currentLength = self.getSharedData(project)['length']
       if currentLength == None:

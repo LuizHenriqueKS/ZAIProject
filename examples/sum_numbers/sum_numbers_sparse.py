@@ -1,8 +1,5 @@
 from ZAIProject import processor
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.python.keras.layers.core import Flatten, RepeatVector
 import ZAIProject as ai
 import json
 

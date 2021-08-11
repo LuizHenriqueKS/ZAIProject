@@ -26,3 +26,4 @@ from ._reshape import Reshape
 from ._samplesToAudioFile import SamplesToAudioFile
 from ._binaryToInt import BinaryToInt
 from ._intToBinary import IntToBinary
+from ._ruleOf3d import RuleOf3D

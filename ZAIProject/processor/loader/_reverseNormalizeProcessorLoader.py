@@ -1,20 +1,19 @@
 from ZAIProject.base import Loader
-from .._autoPadding1D import AutoPadding1D
+from .._reverseNormalize import ReverseNormalize
 
 
-class AutoPadding1DProcessorLoader(Loader):
+class ReverseNormalizeLoader(Loader):
 
   def type(self):
     return 'processor'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return self.tryGetData(data, 'type') == AutoPadding1D.__name__
+    return self.tryGetData(data, 'type') == ReverseNormalize.__name__
 
   def load(self, loaders, project, data):
-    return AutoPadding1D(
-        direction=data['direction'],
-        value=data['value'],
-        length=self.tryGetData(data, 'length'),
+    return ReverseNormalize(
+        minOutput=data['minOutput'],
+        maxOutput=data['maxOutput'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'
