@@ -10,10 +10,19 @@ class Flatten(Processor):
 
   def scale(self, data, project, params=None):
     self.updateShape(project, data)
-    return self.apply(data)
+    return self.flatten(data)
 
   def apply(self, data, project=None, params=None):
     return np.array(data).flatten()
+
+  def flatten(self, data):
+    if isinstance(data, list):
+      result = []
+      for one in data:
+        for i in self.flatten(one):
+          result.append(i)
+      return result
+    return [data]
 
   def reverse(self):
     if self.reverseProcessor != None:

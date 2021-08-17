@@ -27,3 +27,7 @@ from ._samplesToAudioFile import SamplesToAudioFile
 from ._binaryToInt import BinaryToInt
 from ._intToBinary import IntToBinary
 from ._ruleOf3d import RuleOf3D
+from ._eraser1D import Eraser1D
+from ._trim1D import Trim1D
+from ._value import Value
+from ._indexToCategorical import IndexToCategorical

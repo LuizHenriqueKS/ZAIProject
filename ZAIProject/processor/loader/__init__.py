@@ -18,3 +18,8 @@ from ._intToBinaryProcessorLoader import IntToBinaryProcessorLoader
 from ._reverseNormalizeProcessorLoader import ReverseNormalizeLoader
 from ._reverseSparseProcessorLoader import ReverseSparseProcessorLoader
 from ._ruleOf3ProcessorLoader import RuleOf3DProcessorLoader
+from ._valueProcessorLoader import ValueProcessorLoader
+from ._indexToCategoricalProcessorLoader import IndexToCategoricalProcessorLoader
+from ._roundProcessorLoader import RoundProcessorLoader
+from ._trim1DProcessorLoader import Trim1DProcessorLoader
+from ._normalizeProcessorLoader import NormalizeProcessorLoader

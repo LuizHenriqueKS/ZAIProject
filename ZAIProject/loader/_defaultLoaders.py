@@ -31,3 +31,8 @@ class DefaultLoaders(Loaders):
     self.addLoader(ReverseNormalizeLoader())
     self.addLoader(ReverseSparseProcessorLoader())
     self.addLoader(RuleOf3DProcessorLoader())
+    self.addLoader(ValueProcessorLoader())
+    self.addLoader(IndexToCategoricalProcessorLoader())
+    self.addLoader(RoundProcessorLoader())
+    self.addLoader(Trim1DProcessorLoader())
+    self.addLoader(NormalizeProcessorLoader())
