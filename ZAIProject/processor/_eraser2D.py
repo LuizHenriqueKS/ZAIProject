@@ -3,7 +3,7 @@ from ..base._processor import Processor
 from typing import Literal
 
 
-class Eraser1D(Processor):
+class Eraser2D(Processor):
 
   def __init__(self, direction: Literal['left', 'right', 'same'], value=None, sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
@@ -21,45 +21,22 @@ class Eraser1D(Processor):
   def apply(self, data, project, params=None):
     try:
       result = data
+      value = self.getValue(data)
       if self.direction == 'same' or self.direction == 'left':
-        value = self.getValue(project)
-        while result[0] in value:
+        while self.isValueVector(result[0], value):
           result = result[1:]
       if self.direction == 'same' or self.direction == 'right':
-        value = self.getValue(project)
-        while result[-1] in value:
+        while self.isValueVector(result[-1], value):
           result = result[:-1]
       return result
     except ValueError:
       return data
 
-  def findIndex(self, project, data, direction):
-    value = self.getValue(project)
-    index = None
-    for val in value:
-      if direction == 'left':
-        cIndex = self.index(val, data)
-        if index == None or index < cIndex:
-          index = cIndex
-      elif direction == 'right':
-        cIndex = self.lastIndex(val, data)
-        if index == None or index > cIndex:
-          index = cIndex
-      else:
-        raise NotImplementedError()
-    return index
-
-  def index(self, val, data):
-    for i in range(0, len(data)):
-      v = data[i]
-      if v == val:
-        return i
-
-  def lastIndex(self, val, data):
-    for i in range(0, len(data)):
-      v = data[len(data) - 1 - i]
-      if v == val:
-        return len(data) - 1 - i
+  def isValueVector(self, vector, value):
+    for i in vector:
+      if i != value:
+        return False
+    return True
 
   def getValue(self, project):
     if self.value != None:

@@ -36,7 +36,7 @@ class DefaultTensorCallback(tf.keras.callbacks.Callback):
     keys = logs.keys()
     result = []
     for key in keys:
-      if 'accuracy' in key:
+      if 'accuracy' in key and 'val_' not in key:
         result.append(key)
     if len(result) == 0:
       return None

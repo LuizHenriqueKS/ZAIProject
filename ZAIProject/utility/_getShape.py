@@ -1,5 +1,7 @@
 def getShape(data):
-  if isinstance(data, list):
+  if hasattr(data, 'shape'):
+    return data.shape
+  elif isinstance(data, list):
     # More dimensions, so make a recursive call
     outermost_size = len(data)
     if outermost_size == 0:

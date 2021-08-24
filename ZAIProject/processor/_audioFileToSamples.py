@@ -8,11 +8,11 @@ import soundfile
 
 class AudioFileToSamples(Processor):
 
-  def __init__(self, sampleRate=None, mono=False, dtype='float32', sharedDataId=None, reverse=None, name=None):
+  def __init__(self, sampleRate, mono=False, dtype='float32', sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
-    self.sampleRate = sampleRate
     self.mono = mono
     self.dtype = dtype
+    self.sampleRate = sampleRate
 
   def scale(self, data, project=None, params=None):
     return self.apply(data, project, params)

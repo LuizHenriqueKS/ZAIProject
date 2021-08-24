@@ -18,6 +18,12 @@ class ProjectIOSet:
     self.ios.append(io)
     return io
 
+  def removeByIndex(self, index: int):
+    del self.ios[index]
+
+  def removeLast(self):
+    del self.ios[-1]
+
   def __iter__(self):
     self.index = 0
     return self

@@ -4,7 +4,7 @@ from typing import Literal
 
 class AutoPadding1D(Processor):
 
-  def __init__(self, direction: Literal['left', 'right'] = 'right', length=None, value=None, sharedDataId=None, reverse=None, name=None):
+  def __init__(self, direction: Literal['left', 'right', 'same'] = 'same', length=None, value=None, sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.direction = direction
     self.value = value
@@ -24,6 +24,10 @@ class AutoPadding1D(Processor):
         result.append(value)
       elif self.direction == 'left':
         result.insert(0, value)
+      elif self.direction == 'same':
+        result.append(value)
+        if length > len(result):
+          result.insert(0, value)
       else:
         raise ValueError(self.direction)
     return result

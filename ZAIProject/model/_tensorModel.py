@@ -17,9 +17,9 @@ class TensorModel(Model):
   def dataApplier(self):
     return self.project.dataApplier()
 
-  def fit(self, data, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
+  def fit(self, data, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None, validation_data=None):
     if isinstance(data, tf.data.Dataset):
-      return self.fitDataset(data, epochs, verbose, callbacks, tillAccuracy, tillLoss)
+      return self.fitDataset(data, epochs, verbose, callbacks, tillAccuracy, tillLoss, validation_data=validation_data)
     input = self.dataApplier().applyFitInput(data)
     target = self.dataApplier().applyFitTarget(data)
     modelInput = convertToTensors(input)
@@ -33,9 +33,10 @@ class TensorModel(Model):
                           modelTarget,
                           epochs=epochs,
                           verbose=self.getVerbose(verbose),
+                          validation_data=validation_data,
                           callbacks=_callbacks)
 
-  def fitDataset(self, dataset, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None):
+  def fitDataset(self, dataset, epochs: int, verbose=None, callbacks: List[tf.keras.callbacks.Callback] = None, tillAccuracy: float = None, tillLoss: float = None, validation_data=None):
     _callbacks = self.buildCallbacks(
         callbacks,
         tillAccuracy,
@@ -44,7 +45,8 @@ class TensorModel(Model):
     return self.model.fit(dataset,
                           epochs=epochs,
                           verbose=self.getVerbose(verbose),
-                          callbacks=_callbacks)
+                          callbacks=_callbacks,
+                          validation_data=validation_data)
 
   def predict(self, data, context=None):
     result = self.dataApplier().runPredict(

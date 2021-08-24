@@ -9,7 +9,7 @@ import tempfile
 
 class SamplesToAudioFile(Processor):
 
-  def __init__(self, sampleRate=None, dtype='float32', sharedDataId=None, reverse=None, name=None):
+  def __init__(self, sampleRate, dtype='float32', sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.sampleRate = sampleRate
     self.dtype = dtype

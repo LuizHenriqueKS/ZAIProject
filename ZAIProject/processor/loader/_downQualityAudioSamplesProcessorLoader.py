@@ -1,21 +1,18 @@
 from ZAIProject.base import Loader
-from .._ruleOf3 import RuleOf3
+from .._downQualityAudioSamples import DownQualityAudioSamples
 
 
-class RuleOf3ProcessorLoader(Loader):
+class DownQualityAudioSamplesProcessorLoader(Loader):
 
   def type(self):
     return 'processor'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return self.tryGetData(data, 'type') == RuleOf3.__name__
+    return self.tryGetData(data, 'type') == DownQualityAudioSamples.__name__
 
   def load(self, loaders, project, data):
-    return RuleOf3(
-        minInput=data['minInput'],
-        maxInput=data['maxInput'],
-        minOutput=data['minOutput'],
-        maxOutput=data['maxOutput'],
+    return DownQualityAudioSamples(
+        bits=data['bits'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'

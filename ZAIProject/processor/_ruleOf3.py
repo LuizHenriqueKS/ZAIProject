@@ -2,7 +2,7 @@ from ..base._processor import Processor
 from ..utility import applyRuleOf3
 
 
-class RuleOf3D(Processor):
+class RuleOf3(Processor):
 
   def __init__(self, minInput, maxInput, minOutput, maxOutput, sharedDataId=None, reverse=None, name: str = None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
@@ -20,7 +20,7 @@ class RuleOf3D(Processor):
   def reverse(self):
     if self.reverseProcessor != None:
       return self.reverseProcessor
-    return RuleOf3D(minInput=self.minOutput, maxInput=self.maxOutput, minOutput=self.minInput, maxOutput=self.maxInput)
+    return RuleOf3(minInput=self.minOutput, maxInput=self.maxOutput, minOutput=self.minInput, maxOutput=self.maxInput)
 
   def saveData(self, dataRecorder) -> None:
     super().saveData(dataRecorder)

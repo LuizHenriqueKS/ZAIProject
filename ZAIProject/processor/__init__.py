@@ -26,8 +26,14 @@ from ._reshape import Reshape
 from ._samplesToAudioFile import SamplesToAudioFile
 from ._binaryToInt import BinaryToInt
 from ._intToBinary import IntToBinary
-from ._ruleOf3d import RuleOf3D
+from ._ruleOf3 import RuleOf3
 from ._eraser1D import Eraser1D
 from ._trim1D import Trim1D
 from ._value import Value
 from ._indexToCategorical import IndexToCategorical
+from ._autoPadding2D import AutoPadding2D
+from ._eraser2D import Eraser2D
+from ._padding2D import Padding2D
+from ._downQualityAudioSamples import DownQualityAudioSamples
+from ._trimAudioSamples import TrimAudioSamples
+from ._audioSamplesToMelspectrogram import AudioSamplesToMelspectrogram
