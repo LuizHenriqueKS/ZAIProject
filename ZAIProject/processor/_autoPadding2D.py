@@ -21,22 +21,24 @@ class AutoPadding2D(Processor):
     shape = self.getShape(project)
     value = self.getValue(project)
     result = data
+    if type(result).__name__ == 'ndarray':
+      result = result.tolist()
     while shape[0] > len(result):
       if self.direction == 'right':
-        result.append(self.buildValuesVector(value))
+        result.append(self.buildValuesVector(shape, value))
       elif self.direction == 'left':
-        result.insert(0, self.buildValuesVector(value))
+        result.insert(0, self.buildValuesVector(shape, value))
       elif self.direction == 'same':
-        result.append(self.buildValuesVector(value))
+        result.append(self.buildValuesVector(shape, value))
         if shape[0] > len(result):
-          result.insert(0, self.buildValuesVector(value))
+          result.insert(0, self.buildValuesVector(shape, value))
       else:
         raise ValueError(self.direction)
     return result
 
-  def buildValuesVector(self, value):
+  def buildValuesVector(self, shape, value):
     result = []
-    for _ in range(self.shape[1]):
+    for _ in range(shape[1]):
       result.append(value)
     return result
 

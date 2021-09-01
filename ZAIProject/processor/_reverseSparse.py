@@ -1,7 +1,6 @@
 from ..base._processor import Processor
-from ..validation._isFloat import isFloat
-from ..validation._requireNumberArray import requireNumberArray
-from ..utility._getBestIndex import getBestIndex
+from tensorflow import argmax
+import numpy as np
 
 
 class ReverseSparse(Processor):
@@ -13,13 +12,12 @@ class ReverseSparse(Processor):
     return self.apply(data, project, params)
 
   def apply(self, data, project=None, params=None):
-    if params == None or params.io != 'target':
-      if isFloat(data[0]):
-        return [getBestIndex(data)]
-      else:
-        requireNumberArray(data[0])
-        return [getBestIndex(i) for i in data]
-    return data
+    data = np.array(data)
+    if data.dtype == np.int:
+      return data
+    shape = data.shape
+    result = argmax(data, len(shape) - 1)
+    return result.numpy()
 
   def reverse(self):
     if self.reverseProcessor != None:

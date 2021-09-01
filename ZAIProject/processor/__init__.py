@@ -37,3 +37,9 @@ from ._padding2D import Padding2D
 from ._downQualityAudioSamples import DownQualityAudioSamples
 from ._trimAudioSamples import TrimAudioSamples
 from ._audioSamplesToMelspectrogram import AudioSamplesToMelspectrogram
+from ._melspectrogramToAudioSamples import MelspectrogramToAudioSamples
+from ._outputLength import OutputLength
+from ._audioSamplesToSpectrogram import AudioSamplesToSpectrogram
+from ._spectrogramToAudioSamples import SpectrogramToAudioSamples
+from ._treatRepetitions import TreatRepetitions
+from ._reverseTreatRepetitions import ReverseTreatRepetitions

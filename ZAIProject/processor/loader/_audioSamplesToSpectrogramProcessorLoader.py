@@ -1,20 +1,18 @@
 from ZAIProject.base import Loader
-from .._melspectrogramToAudioSamples import MelspectrogramToAudioSamples
+from .._audioSamplesToSpectrogram import AudioSamplesToSpectrogram
 
 
-class MelspectrogramToAudioSamplesProcessorLoader(Loader):
+class AudioSamplesToSpectrogramProcessorLoader(Loader):
 
   def type(self):
     return 'processor'
 
   def canLoad(self, loaders, project, data) -> bool:
-    return self.tryGetData(data, 'type') == MelspectrogramToAudioSamples.__name__
+    return self.tryGetData(data, 'type') == AudioSamplesToSpectrogram.__name__
 
   def load(self, loaders, project, data):
-    return MelspectrogramToAudioSamples(
-        sampleRate=data['sampleRate'],
+    return AudioSamplesToSpectrogram(
         transpose=data['transpose'],
-        n_mels=data['n_mels'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'

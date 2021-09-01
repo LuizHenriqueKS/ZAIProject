@@ -27,7 +27,7 @@ class Eraser1D(Processor):
           result = result[1:]
       if self.direction == 'same' or self.direction == 'right':
         value = self.getValue(project)
-        while result[-1] in value:
+        while len(result) > 0 and result[-1] in value:
           result = result[:-1]
       return result
     except ValueError:

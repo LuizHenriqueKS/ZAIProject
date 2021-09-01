@@ -82,18 +82,18 @@ class Project:
   def myMin(self, a, b):
     if b == None:
       return a
-    if isArray(a):
+    while isArray(a):
       a = min(a)
-    if isArray(b):
+    while isArray(b):
       b = min(b)
     return min(a, b)
 
   def myMax(self, a, b):
     if b == None:
       return a
-    if isArray(a):
+    while isArray(a):
       a = max(a)
-    if isArray(b):
+    while isArray(b):
       b = max(b)
     return max(a, b)
 

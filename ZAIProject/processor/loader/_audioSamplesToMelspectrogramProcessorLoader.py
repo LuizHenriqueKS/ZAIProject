@@ -13,6 +13,8 @@ class AudioSamplesToMelspectrogramProcessorLoader(Loader):
   def load(self, loaders, project, data):
     return AudioSamplesToMelspectrogram(
         sampleRate=data['sampleRate'],
+        transpose=data['transpose'],
+        n_mels=data['n_mels'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'
