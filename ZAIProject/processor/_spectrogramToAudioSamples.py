@@ -23,6 +23,8 @@ class SpectrogramToAudioSamples(Processor):
       result = result[0] * np.exp(1j * result[1])
     if self.transpose:
       result = result.transpose()
+    if self.returnMagnitude and not self.returnPhase:
+      return librosa.griffinlim(result)
     return librosa.istft(result)
 
   def saveData(self, dataRecorder) -> None:

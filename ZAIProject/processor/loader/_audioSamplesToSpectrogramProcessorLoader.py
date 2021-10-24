@@ -12,6 +12,8 @@ class AudioSamplesToSpectrogramProcessorLoader(Loader):
 
   def load(self, loaders, project, data):
     return AudioSamplesToSpectrogram(
+        returnMagnitude=data['returnMagnitude'],
+        returnPhase=data['returnPhase'],
         transpose=data['transpose'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(

@@ -12,7 +12,7 @@ class Loader:
   def load(self, loaders, project, data):
     raise NotImplementedError()
 
-  def tryGetData(self, data, key: str):
+  def tryGetData(self, data, key: str, elseValue=None):
     if key in data:
       return data[key]
-    return None
+    return elseValue

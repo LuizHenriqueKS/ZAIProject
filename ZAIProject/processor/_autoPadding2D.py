@@ -56,7 +56,10 @@ class AutoPadding2D(Processor):
 
   def updateValue(self, project, data):
     if self.value == None:
-      maxValue = max(data)
+      if hasattr(data, 'max'):
+        maxValue = data.max
+      else:
+        maxValue = max(data)
       currentValue = self.getValue(project)
       if currentValue == None or currentValue <= maxValue:
         self.setValue(project, maxValue + 1)

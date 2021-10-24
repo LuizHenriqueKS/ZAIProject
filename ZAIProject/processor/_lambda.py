@@ -4,9 +4,10 @@ import inspect
 
 class Lambda(Processor):
 
-  def __init__(self, lambdaFunc, sharedDataId=None, reverse=None, name=None):
+  def __init__(self, lambdaFunc, recordable=True, sharedDataId=None, reverse=None, name=None):
     super().__init__(sharedDataId=sharedDataId, reverse=reverse, name=name)
     self.lambdaFunc = lambdaFunc
+    self.recordable = recordable
     self.lambdaParamsNum = str(
         inspect.signature(self.lambdaFunc)
     ).count(",") + 1
@@ -23,6 +24,7 @@ class Lambda(Processor):
 
   def saveData(self, dataRecorder) -> None:
     super().saveData(dataRecorder)
-    dataRecorder.record(
-        'lambdaFunc', inspect.getsourcelines(self.lambdaFunc)
-    )
+    if self.recordable:
+      dataRecorder.record(
+          'lambdaFunc', inspect.getsourcelines(self.lambdaFunc)
+      )

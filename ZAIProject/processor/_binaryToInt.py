@@ -12,10 +12,16 @@ class BinaryToInt(Processor):
     return self.apply(data, project, params)
 
   def apply(self, data, project, params=None):
-    strVector = [str(round(i)) for i in data]
+    strVector = [str(self.convertVal(i)) for i in data]
     binaryStr = ''.join(strVector)
     result = int(binaryStr, 2)
     return result
+
+  def convertVal(self, val):
+    if val <= 0.5:
+      return 0
+    else:
+      return 1
 
   def reverse(self):
     if self.reverseProcessor != None:

@@ -14,6 +14,8 @@ class MelspectrogramToAudioSamplesProcessorLoader(Loader):
     return MelspectrogramToAudioSamples(
         sampleRate=data['sampleRate'],
         transpose=data['transpose'],
+        n_fft=self.tryGetData(data, 'n_fft', 2056),
+        hop_length=self.tryGetData(data, 'hop_length', 512),
         n_mels=data['n_mels'],
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
