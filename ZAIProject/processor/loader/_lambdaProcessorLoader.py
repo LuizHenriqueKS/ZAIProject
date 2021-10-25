@@ -22,6 +22,7 @@ class LambdaProcessorLoader(Loader):
         lambdaFunc = self.parseFunc(''.join(lambdaExpression[0]))
     return Lambda(
         lambdaFunc=lambdaFunc,
+        lambdaExpression=lambdaExpression,
         sharedDataId=data['sharedDataId'],
         reverse=loaders.tryLoadChild(
             'processor', project, data, 'reverseProcessor'
